@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios"; // Make sure api.js exists in src/services
+import axios from "axios";
+import styles from "./SubmitPaperPage.module.css"; // Adjust the path
 
 const SubmitPaperPage = () => {
   const [title, setTitle] = useState("");
@@ -10,12 +11,25 @@ const SubmitPaperPage = () => {
   const [category, setCategory] = useState("");
   const [pdfFile, setPdfFile] = useState(null);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Basic validation
     if (!title || !abstract || !keywords || !authors || !correspondingAuthor || !category || !pdfFile) {
       setMessage("Please fill in all fields.");
+      return;
+    }
+
+    // Extra validation: file size/type
+    if (!pdfFile.name.endsWith(".pdf")) {
+      setMessage("Only PDF files are allowed.");
+      return;
+    }
+
+    if (pdfFile.size > 10 * 1024 * 1024) {
+      setMessage("PDF file must be less than 10MB.");
       return;
     }
 
@@ -29,12 +43,12 @@ const SubmitPaperPage = () => {
     formData.append("pdf", pdfFile);
 
     try {
+      setLoading(true);
+      setMessage("");
       await axios.post("/api/papers/submit", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      setMessage("Paper submitted successfully!");
+      setMessage("success: Paper submitted successfully!");
       // Clear form
       setTitle("");
       setAbstract("");
@@ -45,66 +59,75 @@ const SubmitPaperPage = () => {
       setPdfFile(null);
     } catch (err) {
       console.error(err);
-      setMessage("Submission failed.");
+      setMessage("error: Submission failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  const renderMessage = () => {
+    if (!message) return null;
+    const [type, text] = message.includes(":") ? message.split(":") : ["error", message];
+    const color = type === "success" ? styles.success : styles.error;
+    return <p className={`${styles.message} ${color}`}>{text.trim()}</p>;
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6 mt-10 bg-white rounded-xl shadow">
-      <h2 className="text-2xl font-bold mb-4 text-center">Submit Your Paper</h2>
-      {message && <p className="text-center text-red-600">{message}</p>}
+    <div className={styles.container}>
+      <h2 className={styles.title}>Submit Your Paper</h2>
+      {renderMessage()}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        <div className={styles.formGroup}>
           <label className="font-semibold">Paper Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={styles.inputField}
           />
         </div>
-        <div>
+        <div className={styles.formGroup}>
           <label className="font-semibold">Abstract</label>
           <textarea
             value={abstract}
             onChange={(e) => setAbstract(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={styles.textareaField}
             rows={4}
           />
         </div>
-        <div>
+        <div className={styles.formGroup}>
           <label className="font-semibold">Keywords</label>
           <input
             type="text"
             value={keywords}
             onChange={(e) => setKeywords(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={styles.inputField}
           />
         </div>
-        <div>
+        <div className={styles.formGroup}>
           <label className="font-semibold">Authors (names, affiliations, emails)</label>
           <textarea
             value={authors}
             onChange={(e) => setAuthors(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={styles.textareaField}
             rows={3}
           />
         </div>
-        <div>
+        <div className={styles.formGroup}>
           <label className="font-semibold">Corresponding Author</label>
           <input
             type="text"
             value={correspondingAuthor}
             onChange={(e) => setCorrespondingAuthor(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={styles.inputField}
           />
         </div>
-        <div>
+        <div className={styles.formGroup}>
           <label className="font-semibold">Submission Category</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={styles.selectField}
           >
             <option value="">Select Category</option>
             <option value="AI">Artificial Intelligence</option>
@@ -113,20 +136,22 @@ const SubmitPaperPage = () => {
             <option value="HCI">Human-Computer Interaction</option>
           </select>
         </div>
-        <div>
+        <div className={styles.formGroup}>
           <label className="font-semibold">Upload PDF (4–8 pages)</label>
           <input
             type="file"
             accept="application/pdf"
             onChange={(e) => setPdfFile(e.target.files[0])}
-            className="w-full p-2 border rounded"
+            className={styles.inputField}
           />
+          {pdfFile && <p className="text-sm text-gray-600 mt-1">Selected: {pdfFile.name}</p>}
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          disabled={loading}
+          className={styles.submitButton}
         >
-          Submit Paper
+          {loading ? "Submitting..." : "Submit Paper"}
         </button>
       </form>
     </div>
