@@ -9,17 +9,23 @@ const AssignPdfPage = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Mock data for now — replace with API calls later
-    setReviewers([
-      { email: "reviewer1@example.com", name: "Reviewer One" },
-      { email: "reviewer2@example.com", name: "Reviewer Two" },
-    ]);
+  // Fetch reviewers (static for now)
+  setReviewers([
+    { email: "reviewer1@example.com", name: "Reviewer One" },
+    { email: "reviewer2@example.com", name: "Reviewer Two" },
+  ]);
 
-    setPapers([
-      { id: "paper1", title: "AI in Healthcare" },
-      { id: "paper2", title: "Blockchain for Data Security" },
-    ]);
-  }, []);
+  // Fetch papers from backend
+  fetch("/api/papers")
+    .then((res) => res.json())
+    .then((data) => {
+      setPapers(data.map(p => ({ id: p._id, title: p.title })));
+    })
+    .catch((err) => {
+      console.error("Error fetching papers:", err);
+    });
+}, []);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

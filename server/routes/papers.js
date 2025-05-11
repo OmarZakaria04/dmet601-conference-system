@@ -55,5 +55,18 @@ router.post("/submit", upload.single("pdf"), async (req, res) => {
     res.status(500).json({ message: "Server error during submission." });
   }
 });
+// GET all papers (title + ID)
+router.get("/", async (req, res) => {
+  try {
+    const papers = await AuthorSubmission.find({}, "title _id");
+    if (!papers.length) {
+      return res.status(404).json({ message: "No papers found" });
+    }
+    res.status(200).json(papers);
+  } catch (err) {
+    console.error("Error fetching papers:", err);
+    res.status(500).json({ message: "Failed to fetch papers." });
+  }
+});
 
 module.exports = router;
