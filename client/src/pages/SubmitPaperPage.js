@@ -47,8 +47,10 @@ const SubmitPaperPage = () => {
     try {
       setLoading(true);
       setMessage("");
-      await axios.post("/api/papers/submit", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      await axios.post("http://localhost:5000/api/papers/submit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       setMessage("success: Paper submitted successfully!");
       // Clear form
