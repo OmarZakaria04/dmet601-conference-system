@@ -4,7 +4,10 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const paperRoutes = require("./routes/papers");
 const app = express();
-
+const reviewerRoutes = require("./routes/reviewers");
+app.use("/api/reviewers", reviewerRoutes);
+const assignmentRoutes = require("./routes/assignments");
+app.use("/api/assignments", assignmentRoutes);
 // Middlewares
 app.use(cors());
 app.use(express.json());

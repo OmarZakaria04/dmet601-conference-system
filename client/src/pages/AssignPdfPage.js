@@ -9,11 +9,15 @@ const AssignPdfPage = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-  // Fetch reviewers (static for now)
-  setReviewers([
-    { email: "reviewer1@example.com", name: "Reviewer One" },
-    { email: "reviewer2@example.com", name: "Reviewer Two" },
-  ]);
+  // Fetch reviewers from backend
+  fetch("/api/reviewers")
+    .then((res) => res.json())
+    .then((data) => {
+      setReviewers(data);
+    })
+    .catch((err) => {
+      console.error("Error fetching reviewers:", err);
+    });
 
   // Fetch papers from backend
   fetch("/api/papers")
@@ -28,21 +32,30 @@ const AssignPdfPage = () => {
 
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!selectedReviewer || !selectedPaper) {
-      setMessage("Please select both a reviewer and a paper.");
-      return;
-    }
+  if (!selectedReviewer || !selectedPaper) {
+    setMessage("Please select both a reviewer and a paper.");
+    return;
+  }
 
-    // Send assignment to backend (e.g., POST reviewer + paperID)
-    console.log({
-      reviewer: selectedReviewer,
+  // Send assignment to backend
+  fetch("/api/assignments", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      reviewerId: selectedReviewer,
       paperId: selectedPaper,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setMessage(data.message || "Paper assigned successfully!");
+    })
+    .catch((err) => {
+      setMessage("Error assigning paper.");
     });
-
-    setMessage("Paper assigned to reviewer successfully.");
-  };
+};
 
   return (
     <div className="assign-pdf-container">
@@ -52,17 +65,17 @@ const AssignPdfPage = () => {
       <form onSubmit={handleSubmit} className="assign-pdf-form">
         <div>
           <label>Select Reviewer</label>
-          <select
-            value={selectedReviewer}
-            onChange={(e) => setSelectedReviewer(e.target.value)}
-          >
-            <option value="">-- Choose Reviewer --</option>
-            {reviewers.map((rev, idx) => (
-              <option key={idx} value={rev.email}>
-                {rev.name} ({rev.email})
-              </option>
-            ))}
-          </select>
+    <select
+  value={selectedReviewer}
+  onChange={(e) => setSelectedReviewer(e.target.value)}
+>
+  <option value="">-- Choose Reviewer --</option>
+  {reviewers.map((rev) => (
+    <option key={rev._id} value={rev._id}>
+      ID: {rev._id} - {rev.name} ({rev.email})
+    </option>
+  ))}
+</select>
         </div>
 
         <div>
