@@ -1,0 +1,42 @@
+/* ChairDashboard.css */
+
+.chair-dashboard {
+  max-width: 600px;
+  margin: 60px auto;
+  text-align: center;
+  padding: 2rem;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chair-dashboard h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.chair-button {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chair-button:hover {
+  background-color: #1e40af;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

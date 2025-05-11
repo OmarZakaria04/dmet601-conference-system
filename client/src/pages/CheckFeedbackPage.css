@@ -1,0 +1,74 @@
+.check-feedback-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 2rem;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.check-feedback-container h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.feedback-table-section {
+  margin-top: 2rem;
+}
+
+.feedback-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.feedback-table th,
+.feedback-table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.feedback-table th {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+.feedback-table tr:nth-child(even) {
+  background-color: #f3f4f6;
+}
+
+.feedback-table tr:hover {
+  background-color: #e5e7eb;
+}
+
+.decision-buttons {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.decision-buttons label {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #1e40af;
+}
+
+button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}

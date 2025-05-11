@@ -1,0 +1,50 @@
+/* AssignPdfPage.css */
+
+.assign-pdf-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 2rem;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.assign-pdf-container h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.assign-pdf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.assign-pdf-form input,
+.assign-pdf-form select {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.assign-pdf-form button {
+  padding: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.assign-pdf-form button:hover {
+  background-color: #1e40af;
+}
+
+.assign-pdf-form button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
