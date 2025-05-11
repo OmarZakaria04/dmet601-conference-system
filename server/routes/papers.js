@@ -7,8 +7,12 @@ const router = express.Router();
 
 // Ensure /uploads folder exists (create it manually if needed)
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "server/uploads"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../uploads")); // ✅ Always resolves correctly
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 
 const upload = multer({
