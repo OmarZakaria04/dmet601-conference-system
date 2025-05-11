@@ -8,6 +8,7 @@ const SubmitPaperPage = () => {
   const [keywords, setKeywords] = useState("");
   const [authors, setAuthors] = useState("");
   const [correspondingAuthor, setCorrespondingAuthor] = useState("");
+  const [correspondingAuthorEmail, setCorrespondingAuthorEmail] = useState(""); // Added state for email
   const [category, setCategory] = useState("");
   const [pdfFile, setPdfFile] = useState(null);
   const [message, setMessage] = useState("");
@@ -17,7 +18,7 @@ const SubmitPaperPage = () => {
     e.preventDefault();
 
     // Basic validation
-    if (!title || !abstract || !keywords || !authors || !correspondingAuthor || !category || !pdfFile) {
+    if (!title || !abstract || !keywords || !authors || !correspondingAuthor || !correspondingAuthorEmail || !category || !pdfFile) {
       setMessage("Please fill in all fields.");
       return;
     }
@@ -39,6 +40,7 @@ const SubmitPaperPage = () => {
     formData.append("keywords", keywords);
     formData.append("authors", authors);
     formData.append("correspondingAuthor", correspondingAuthor);
+    formData.append("correspondingAuthorEmail", correspondingAuthorEmail); // Added email
     formData.append("category", category);
     formData.append("pdf", pdfFile);
 
@@ -55,6 +57,7 @@ const SubmitPaperPage = () => {
       setKeywords("");
       setAuthors("");
       setCorrespondingAuthor("");
+      setCorrespondingAuthorEmail(""); // Clear email
       setCategory("");
       setPdfFile(null);
     } catch (err) {
@@ -120,6 +123,16 @@ const SubmitPaperPage = () => {
             value={correspondingAuthor}
             onChange={(e) => setCorrespondingAuthor(e.target.value)}
             className={styles.inputField}
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label className="font-semibold">Corresponding Author Email</label>
+          <input
+            type="email"
+            value={correspondingAuthorEmail}
+            onChange={(e) => setCorrespondingAuthorEmail(e.target.value)}
+            className={styles.inputField}
+            required
           />
         </div>
         <div className={styles.formGroup}>
