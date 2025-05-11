@@ -14,7 +14,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // to acce
 app.use("/api/papers", paperRoutes);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI || "mongodb+srv://moustafamsamir:Darsh@cluster0.mongodb.net/conferenceSystem?retryWrites=true&w=majority", {
+mongoose.connect(process.env.MONGO_URI || "mongodb+srv://mostafamsamir:Darsh@webprojectcluster.yd1xmra.mongodb.net/?retryWrites=true&w=majority&appName=webProjectCluster", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
