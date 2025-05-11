@@ -14,7 +14,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // to acce
 app.use("/api/papers", paperRoutes);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI || "mongodb+srv://<username>:<password>@cluster0.mongodb.net/conferenceSystem?retryWrites=true&w=majority", {
+mongoose.connect(process.env.MONGO_URI || "mongodb+srv://moustafamsamir:Darsh@cluster0.mongodb.net/conferenceSystem?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI || "mongodb+srv://<username>:<password>@c
 .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 app.use(express.static(path.join(__dirname, "../client/build")));
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
