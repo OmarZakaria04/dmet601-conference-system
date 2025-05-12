@@ -11,10 +11,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/api/reviewers", reviewerRoutes);
 app.use("/api/assignments", assignmentRoutes);
-// Middlewares
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
-
-// Routes
 app.use("/api/papers", paperRoutes);
 
 // MongoDB connection

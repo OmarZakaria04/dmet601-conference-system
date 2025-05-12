@@ -31,20 +31,25 @@ const AssignPdfPage = () => {
 }, []);
 
 
-  const handleSubmit = (e) => {
+ const handleSubmit = (e) => {
   e.preventDefault();
 
   if (!selectedReviewer || !selectedPaper) {
     setMessage("Please select both a reviewer and a paper.");
+    console.log("⚠️ Reviewer or Paper not selected:", selectedReviewer, selectedPaper);
     return;
   }
 
-  // Send assignment to backend
+  console.log("✅ Sending assignment request:", {
+    reviewerEmail: selectedReviewer,
+    paperId: selectedPaper,
+  });
+
   fetch("/api/assignments", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      reviewerId: selectedReviewer,
+      reviewerEmail: selectedReviewer,
       paperId: selectedPaper,
     }),
   })
@@ -71,8 +76,8 @@ const AssignPdfPage = () => {
 >
   <option value="">-- Choose Reviewer --</option>
   {reviewers.map((rev) => (
-    <option key={rev._id} value={rev._id}>
-      ID: {rev._id} - {rev.name} ({rev.email})
+    <option key={rev._id} value={rev.email}>
+      {rev.name} ({rev.email})
     </option>
   ))}
 </select>
