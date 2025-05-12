@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
     }
 
     const paperInfo = {
-      paperId: paper._id,
+      paperId: paper._id.toString(),
       title: paper.title,
       filePath: paper.filePath,
     };

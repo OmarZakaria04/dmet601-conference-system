@@ -1,75 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./ReviewerDashboard.css"; // Same folder
-
-
+import "./ReviewerDashboard.css";
 
 const ReviewerDashboard = () => {
   const [papers, setPapers] = useState([]);
-  const navigate = useNavigate();
+  const reviewerEmail = "reviewer1@conference.com"; // ✅ Static reviewer email for now
 
-  // Dummy data for now – will be replaced with data from backend
   useEffect(() => {
-    const dummyPapers = [
-      {
-        title: "AI in Healthcare",
-        abstract: "Exploring applications of AI in modern medical diagnosis.",
-        keywords: "AI, healthcare, machine learning",
-        authors: "Alice Smith, Bob Lee",
-        correspondingAuthor: "Alice Smith",
-        category: "Artificial Intelligence",
-        pdf: "/uploads/ai-healthcare.pdf",
-      },
-      {
-        title: "Blockchain in Finance",
-        abstract: "How blockchain is reshaping the financial sector.",
-        keywords: "Blockchain, finance, cryptocurrency",
-        authors: "John Doe, Jane Roe",
-        correspondingAuthor: "John Doe",
-        category: "FinTech",
-        pdf: "/uploads/blockchain-finance.pdf",
-      },
-    ];
+    // Step 1: Fetch reviewer by email to get PDF_IDs
+    fetch(`/api/reviewers/by-email/${reviewerEmail}`)
+      .then((res) => res.json())
+      .then(async (reviewer) => {
+        if (!reviewer.PDF_IDs || reviewer.PDF_IDs.length === 0) {
+          console.log("No papers assigned to this reviewer.");
+          setPapers([]);
+          return;
+        }
 
-    setPapers(dummyPapers);
+        // Step 2: For each paperId in PDF_IDs, fetch details from AuthorSubmission
+        const detailedPapers = await Promise.all(
+          reviewer.PDF_IDs.map(async (pdf) => {
+            try {
+              const res = await fetch(`/api/papers/${pdf.paperId}`);
+              const paper = await res.json();
+              return { ...paper, filePath: pdf.filePath };
+            } catch (err) {
+              console.error("Failed to fetch paper details:", err);
+              return null;
+            }
+          })
+        );
+
+        setPapers(detailedPapers.filter(p => p !== null));
+      })
+      .catch((err) => {
+        console.error("Error fetching reviewer data:", err);
+      });
   }, []);
 
   return (
     <div className="container">
       <h2 className="title">Reviewer Dashboard</h2>
-      <table className="w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">Title</th>
-            <th className="border p-2">Abstract</th>
-            <th className="border p-2">Keywords</th>
-            <th className="border p-2">Authors</th>
-            <th className="border p-2">Corresponding Author</th>
-            <th className="border p-2">Category</th>
-            <th className="border p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {papers.map((paper, index) => (
-            <tr key={index}>
-              <td className="border p-2">{paper.title}</td>
-              <td className="border p-2">{paper.abstract}</td>
-              <td className="border p-2">{paper.keywords}</td>
-              <td className="border p-2">{paper.authors}</td>
-              <td className="border p-2">{paper.correspondingAuthor}</td>
-              <td className="border p-2">{paper.category}</td>
-              <td className="border p-2">
-                <button
-                  className="submitButton"
-                  onClick={() => navigate(`/review/${index}`)}
-                >
-                  Review Paper
-                </button>
-              </td>
+      {papers.length === 0 ? (
+        <p>No assigned papers found.</p>
+      ) : (
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border p-2">Title</th>
+              <th className="border p-2">Abstract</th>
+              <th className="border p-2">Keywords</th>
+              <th className="border p-2">Authors</th>
+              <th className="border p-2">Corresponding Author</th>
+              <th className="border p-2">Category</th>
+              <th className="border p-2">PDF</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {papers.map((paper, index) => (
+              <tr key={index}>
+                <td className="border p-2">{paper.title}</td>
+                <td className="border p-2">{paper.abstract}</td>
+                <td className="border p-2">{paper.keywords?.join(", ")}</td>
+                <td className="border p-2">{paper.authors?.join(", ")}</td>
+                <td className="border p-2">{paper.correspondingAuthor?.name}</td>
+                <td className="border p-2">{paper.category}</td>
+                <td className="border p-2">
+                  <a href={paper.filePath} target="_blank" rel="noreferrer">
+                    Open PDF
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

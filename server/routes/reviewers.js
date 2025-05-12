@@ -27,4 +27,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Get reviewer by email
+router.get("/by-email/:email", async (req, res) => {
+  try {
+    const reviewer = await Reviewer.findOne({ email: req.params.email });
+    if (!reviewer) {
+      return res.status(404).json({ message: "Reviewer not found." });
+    }
+    res.status(200).json(reviewer);
+  } catch (err) {
+    console.error("Reviewer lookup error:", err);
+    res.status(500).json({ message: "Error fetching reviewer." });
+  }
+});
+
 module.exports = router;
