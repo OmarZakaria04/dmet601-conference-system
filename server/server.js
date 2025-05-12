@@ -4,14 +4,15 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const paperRoutes = require("./routes/papers");
 const app = express();
-const reviewerRoutes = require("./routes/reviewers");
-app.use("/api/reviewers", reviewerRoutes);
 const assignmentRoutes = require("./routes/assignments");
+const reviewerRoutes = require("./routes/reviewers");
+
+app.use(express.json());
+app.use(cors());
+app.use("/api/reviewers", reviewerRoutes);
 app.use("/api/assignments", assignmentRoutes);
 // Middlewares
-app.use(cors());
-app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // to access uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
 
 // Routes
 app.use("/api/papers", paperRoutes);
@@ -33,4 +34,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });
-//test
