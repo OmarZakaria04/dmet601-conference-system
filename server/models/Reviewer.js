@@ -17,4 +17,4 @@ const reviewerSchema = new mongoose.Schema({
   ],
 });
 
-module.exports = mongoose.model("Reviewer", reviewerSchema);
+module.exports = mongoose.model("Reviewer", reviewerSchema,"reviewers");
