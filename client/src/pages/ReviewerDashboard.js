@@ -1,36 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ReviewerDashboard.css";
 
 const ReviewerDashboard = () => {
   const [papers, setPapers] = useState([]);
-  const reviewerEmail = "reviewer1@conference.com"; // ✅ Static reviewer email for now
+  const reviewerEmail = "reviewer1@conference.com";
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Step 1: Fetch reviewer by email to get PDF_IDs
     fetch(`/api/reviewers/by-email/${reviewerEmail}`)
       .then((res) => res.json())
-      .then(async (reviewer) => {
+      .then((reviewer) => {
         if (!reviewer.PDF_IDs || reviewer.PDF_IDs.length === 0) {
-          console.log("No papers assigned to this reviewer.");
           setPapers([]);
           return;
         }
 
-        // Step 2: For each paperId in PDF_IDs, fetch details from AuthorSubmission
-        const detailedPapers = await Promise.all(
-          reviewer.PDF_IDs.map(async (pdf) => {
-            try {
-              const res = await fetch(`/api/papers/${pdf.paperId}`);
-              const paper = await res.json();
-              return { ...paper, filePath: pdf.filePath };
-            } catch (err) {
-              console.error("Failed to fetch paper details:", err);
-              return null;
-            }
-          })
-        );
-
-        setPapers(detailedPapers.filter(p => p !== null));
+        setPapers(reviewer.PDF_IDs);
       })
       .catch((err) => {
         console.error("Error fetching reviewer data:", err);
@@ -47,11 +33,6 @@ const ReviewerDashboard = () => {
           <thead>
             <tr className="bg-gray-100">
               <th className="border p-2">Title</th>
-              <th className="border p-2">Abstract</th>
-              <th className="border p-2">Keywords</th>
-              <th className="border p-2">Authors</th>
-              <th className="border p-2">Corresponding Author</th>
-              <th className="border p-2">Category</th>
               <th className="border p-2">PDF</th>
             </tr>
           </thead>
@@ -59,15 +40,13 @@ const ReviewerDashboard = () => {
             {papers.map((paper, index) => (
               <tr key={index}>
                 <td className="border p-2">{paper.title}</td>
-                <td className="border p-2">{paper.abstract}</td>
-                <td className="border p-2">{paper.keywords?.join(", ")}</td>
-                <td className="border p-2">{paper.authors?.join(", ")}</td>
-                <td className="border p-2">{paper.correspondingAuthor?.name}</td>
-                <td className="border p-2">{paper.category}</td>
                 <td className="border p-2">
-                  <a href={paper.filePath} target="_blank" rel="noreferrer">
-                    Open PDF
-                  </a>
+                  <button
+                    className="reviewButton"
+                    onClick={() => navigate(`/review/${paper.paperId}`)}
+                  >
+                    Review Paper
+                  </button>
                 </td>
               </tr>
             ))}

@@ -2,8 +2,28 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const AuthorSubmission = require("../models/AuthorSubmission");
-
 const router = express.Router();
+const mongoose = require("mongoose");
+
+// GET paper by ID
+router.get("/:id", async (req, res) => {
+  try {
+    // Validate ID and convert safely
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid paper ID." });
+    }
+
+    const paper = await AuthorSubmission.findById(req.params.id);
+    if (!paper) {
+      return res.status(404).json({ message: "Paper not found." });
+    }
+
+    res.status(200).json(paper);
+  } catch (err) {
+    console.error("Error fetching paper:", err);
+    res.status(500).json({ message: "Error fetching paper." });
+  }
+});
 
 // Ensure /uploads folder exists (create it manually if needed)
 const storage = multer.diskStorage({
