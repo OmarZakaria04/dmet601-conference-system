@@ -29,23 +29,33 @@ const ReviewFormPage = () => {
   }, [id]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!grade || !feedback) {
-      setMessage("Please fill in both grade and feedback.");
-      return;
-    }
+  if (!grade || !feedback) {
+    setMessage("Please fill in both grade and feedback.");
+    return;
+  }
 
-    console.log({
+  fetch("/api/reviews", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
       paperId: id,
       grade,
       feedback,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setMessage(data.message || "Review submitted successfully!");
+      setGrade("");
+      setFeedback("");
+    })
+    .catch((err) => {
+      console.error("❌ Submission error:", err);
+      setMessage("Error submitting review.");
     });
-
-    setMessage("Review submitted successfully.");
-    setGrade("");
-    setFeedback("");
-  };
+};
 
   const handlePdfOpen = () => {
     if (!pdfPath) {
