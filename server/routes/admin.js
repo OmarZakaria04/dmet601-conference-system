@@ -1,24 +1,25 @@
-const express = require('express');
-const User = require('../models/User');
+const express = require("express");
+const User = require("../models/User");
+const Reviewer = require("../models/Reviewer");
 const router = express.Router();
 
-// Route to fetch all users
-router.get('/users', async (req, res) => {
+// Route to get all users
+router.get("/users", async (req, res) => {
   try {
-    const users = await User.find(); // Fetch all users from the "Auth" collection
-    res.status(200).json({ users });
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch users" });
+    console.error("Error fetching users:", err);
+    res.status(500).json({ message: "Failed to fetch users", error: err });
   }
 });
 
-// Route to update the user's role
-router.put('/update-role/:id', async (req, res) => {
+// Route to update user roles (admin only)
+router.put("/update-role/:id", async (req, res) => {
   const { role } = req.body;
   const { id } = req.params;
 
-  // Validate role
-  const validRoles = ['admin', 'user', 'chair', 'reviewer', 'author'];
+  const validRoles = ["admin", "user", "chair", "reviewer", "author"];
   if (!validRoles.includes(role)) {
     return res.status(400).json({ message: "Invalid role" });
   }
@@ -29,13 +30,28 @@ router.put('/update-role/:id', async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update the user's role
+    // Update user role
     user.role = role;
     await user.save();
 
+    // If reviewer, also insert into reviewers collection (if not exists)
+    if (role === "reviewer") {
+      const reviewerExists = await Reviewer.findOne({ email: user.email });
+      if (!reviewerExists) {
+        const reviewer = new Reviewer({
+          name: user.email.split('@')[0], // fallback: use email prefix as name
+          email: user.email,
+          PDF_IDs: [],
+        });
+        await reviewer.save();
+        console.log(`✅ Reviewer added: ${user.email}`);
+      }
+    }
+
     res.status(200).json({ message: "User role updated successfully", user });
   } catch (err) {
-    res.status(500).json({ message: "Failed to update user role" });
+    console.error("❌ Error updating role:", err);
+    res.status(500).json({ message: "Failed to update user role", error: err });
   }
 });
 
