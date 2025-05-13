@@ -4,7 +4,7 @@ import "./ReviewerDashboard.css";
 
 const ReviewerDashboard = () => {
   const [papers, setPapers] = useState([]);
-  const reviewerEmail = "reviewer1@conference.com";
+  const reviewerEmail = "reviewer2@conference.com";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const ReviewerDashboard = () => {
                 <td className="border p-2">
                   <button
                     className="reviewButton"
-                    onClick={() => navigate(`/review/${paper.paperId}`)}
+                    onClick={() => navigate(`/review/${paper.paperId}`, { state: { reviewerEmail } })}
                   >
                     Review Paper
                   </button>

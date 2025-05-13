@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import "./ReviewFormPage.css";
 
 const ReviewFormPage = () => {
-  const { id } = useParams(); // Paper ID from URL
-  const reviewerEmail = "reviewer1@conference.com"; // Static for now
+  const { id } = useParams();
+  const location = useLocation();
+  const reviewerEmail = location.state?.reviewerEmail || "reviewer1@conference.com";
   const [pdfPath, setPdfPath] = useState("");
   const [grade, setGrade] = useState("");
   const [feedback, setFeedback] = useState("");
