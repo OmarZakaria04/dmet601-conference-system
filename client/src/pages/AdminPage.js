@@ -12,7 +12,7 @@ function AdminPage() {
         const res = await fetch("http://localhost:5000/api/admin/users");
         const data = await res.json();
         if (res.ok) {
-          setUsers(data.users);
+          setUsers(data);
         } else {
           console.error(data.message);
         }

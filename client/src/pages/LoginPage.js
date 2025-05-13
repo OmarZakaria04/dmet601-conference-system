@@ -18,23 +18,29 @@ function LoginPage() {
 
     const data = await res.json();
     if (res.ok) {
-  const role = data.user.role;
+      const { email, role } = data.user; // Assuming the response contains the user object
 
-  if (role === "author") {
-    window.location.href = "/submit";
-  } else if (role === "reviewer") {
-    window.location.href = "/reviewerdashboard";
-  } else if (role === "chair") {
-    window.location.href = "/chairdashboard";
-  } else if (role === "admin") {
-    window.location.href = "/admin";
-  }else if (role === "user") {
-    window.location.href = "/user";
-  } else {
-    alert("Unknown role. Please contact support.");
-  }
-}
+      // Save email and role to localStorage
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userRole", role);
 
+      // Redirect based on role
+      if (role === "author") {
+        window.location.href = "/submit";
+      } else if (role === "reviewer") {
+        window.location.href = "/reviewerdashboard";
+      } else if (role === "chair") {
+        window.location.href = "/chairdashboard";
+      } else if (role === "admin") {
+        window.location.href = "/admin";
+      } else if (role === "user") {
+        window.location.href = "/user";
+      } else {
+        alert("Unknown role. Please contact support.");
+      }
+    } else {
+      alert("Login failed. Please check your credentials.");
+    }
   };
 
   return (

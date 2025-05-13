@@ -4,10 +4,17 @@ import "./ReviewerDashboard.css";
 
 const ReviewerDashboard = () => {
   const [papers, setPapers] = useState([]);
-  const reviewerEmail = "reviewer4@conference.com";
+  const reviewerEmail = localStorage.getItem("userEmail"); // Get email from localStorage
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!reviewerEmail) {
+      // Redirect to login if no email is found in localStorage
+      window.location.href = "/login";
+      return;
+    }
+
+    // Fetch the reviewer data by email
     fetch(`/api/reviewers/by-email/${reviewerEmail}`)
       .then((res) => res.json())
       .then((reviewer) => {
@@ -21,7 +28,7 @@ const ReviewerDashboard = () => {
       .catch((err) => {
         console.error("Error fetching reviewer data:", err);
       });
-  }, []);
+  }, [reviewerEmail]);
 
   return (
     <div className="container">
