@@ -7,6 +7,9 @@ import AssignPdfPage from "./pages/AssignPdfPage"; // Page for assigning PDFs to
 import CheckFeedbackPage from "./pages/CheckFeedbackPage"; // Page to check reviewers' feedback
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import UserWaitingPage from "./pages/UserWaitingPage";
+import AdminPage from "./pages/AdminPage"; // Import Admin Page
+
 
 
 function App() {
@@ -31,8 +34,12 @@ function App() {
         {/* Route for checking feedback from reviewers */}
         <Route path="/checkfeedback" element={<CheckFeedbackPage />} />
         {/* Login & Register */}
-<Route path="/login" element={<LoginPage />} />
-<Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        {/* Route for assigning PDFs to reviewers */}
+        <Route path="/admin" element={<AdminPage/>} />
+        {/* Route for assigning PDFs to reviewers */}
+        <Route path="/user" element={<UserWaitingPage />} />
 
       </Routes>
     </Router>

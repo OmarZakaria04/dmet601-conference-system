@@ -8,7 +8,7 @@ const assignmentRoutes = require("./routes/assignments");
 const reviewerRoutes = require("./routes/reviewers");
 const reviewRoutes = require("./routes/reviews");
 const authRoutes = require("./routes/auth");
-
+const adminRoutes = require('./routes/admin'); // Add this line at the top
 
 
 app.use(express.json());
@@ -19,7 +19,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/papers", paperRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use('/api/admin', adminRoutes); // Add this line to your existing middleware setup
 
 
 // MongoDB connection

@@ -26,6 +26,10 @@ function LoginPage() {
     window.location.href = "/reviewerdashboard";
   } else if (role === "chair") {
     window.location.href = "/chairdashboard";
+  } else if (role === "admin") {
+    window.location.href = "/admin";
+  }else if (role === "user") {
+    window.location.href = "/user";
   } else {
     alert("Unknown role. Please contact support.");
   }
