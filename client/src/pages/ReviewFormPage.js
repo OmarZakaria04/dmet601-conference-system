@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./ReviewFormPage.css";
 
 const ReviewFormPage = () => {
-  const { id } = useParams(); // gets the paper ID from URL
+  const { id } = useParams(); // Paper ID from URL
+  const reviewerEmail = "reviewer1@conference.com"; // Static for now
+  const [pdfPath, setPdfPath] = useState("");
   const [grade, setGrade] = useState("");
   const [feedback, setFeedback] = useState("");
   const [message, setMessage] = useState("");
 
-  // Dummy PDF URL (replace with actual logic later)
- const dummyPdfUrl = "/test.pdf";
-
+  useEffect(() => {
+    // Fetch reviewer by email to get assigned PDFs
+    fetch(`/api/reviewers/by-email/${reviewerEmail}`)
+      .then((res) => res.json())
+      .then((reviewer) => {
+        const paper = reviewer.PDF_IDs.find((pdf) => pdf.paperId === id);
+        if (paper) {
+          setPdfPath(paper.filePath);
+        } else {
+          setMessage("Paper not assigned to this reviewer.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching reviewer data:", err);
+        setMessage("Error fetching reviewer data.");
+      });
+  }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +36,6 @@ const ReviewFormPage = () => {
       return;
     }
 
-    // In a real app, send this to the backend
     console.log({
       paperId: id,
       grade,
@@ -33,15 +48,18 @@ const ReviewFormPage = () => {
   };
 
   const handlePdfOpen = () => {
-    window.open(dummyPdfUrl, "_blank");
+    if (!pdfPath) {
+      setMessage("No PDF available for this paper.");
+      return;
+    }
+    window.open(pdfPath, "_blank");
   };
 
   return (
     <div className="container">
       <h2 className="title">Review Paper</h2>
 
-      {/* Button to open the PDF */}
-      <button className="openPdfButton" onClick={handlePdfOpen}>
+      <button className="openPdfButton" onClick={handlePdfOpen} disabled={!pdfPath}>
         Open PDF
       </button>
 
