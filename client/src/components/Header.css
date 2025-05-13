@@ -1,0 +1,26 @@
+.header {
+  background-color: #f8f9fa;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-info {
+  font-weight: bold;
+  color: #333;
+}
+
+.logout-button {
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #c53030;
+}

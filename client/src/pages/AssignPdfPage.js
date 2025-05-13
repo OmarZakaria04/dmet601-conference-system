@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AssignPdfPage.css";
+import Header from "../components/Header"; // ✅ Import Header
 
 const AssignPdfPage = () => {
   const [reviewers, setReviewers] = useState([]);
@@ -63,6 +64,8 @@ const AssignPdfPage = () => {
 };
 
   return (
+    <div>
+      <Header /> {/* ✅ Add header here */}
     <div className="assign-pdf-container">
       <h2>Assign Paper to Reviewer</h2>
       {message && <p>{message}</p>}
@@ -100,6 +103,7 @@ const AssignPdfPage = () => {
 
         <button type="submit">Assign</button>
       </form>
+    </div>
     </div>
   );
 };

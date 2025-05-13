@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CheckFeedbackPage.css";
+import Header from "../components/Header"; // ✅ Import Header
+
 
 const CheckFeedbackPage = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -46,6 +48,8 @@ const CheckFeedbackPage = () => {
   };
 
   return (
+    <div>
+    <Header /> {/* ✅ Add header here */}
     <div className="check-feedback-container">
       <h2>Reviewers' Feedback</h2>
       {message && <p>{message}</p>}
@@ -111,6 +115,7 @@ const CheckFeedbackPage = () => {
           <button onClick={handleSubmit}>Submit Decision</button>
         </div>
       )}
+    </div>
     </div>
   );
 };

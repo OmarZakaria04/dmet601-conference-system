@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./admin.css";
+import Header from "../components/Header"; // ✅ Import
 
 function AdminPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch all users on page load
     const fetchUsers = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/admin/users");
@@ -55,6 +55,7 @@ function AdminPage() {
 
   return (
     <div className="admin-container">
+      <Header /> {/* ✅ Add header here */}
       <h1>Admin Dashboard</h1>
       <h2>Manage Users</h2>
       <table>
@@ -73,7 +74,6 @@ function AdminPage() {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>
-                {/* Dropdown to change role */}
                 <select
                   value={user.role}
                   onChange={(e) => handleRoleChange(user._id, e.target.value)}

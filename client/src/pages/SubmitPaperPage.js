@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styles from "./SubmitPaperPage.module.css"; // Adjust the path
+import Header from "../components/Header"; // Import Header component
 
 const SubmitPaperPage = () => {
   const [title, setTitle] = useState("");
@@ -78,6 +79,8 @@ const SubmitPaperPage = () => {
   };
 
   return (
+    <div>
+      <Header /> {/* Add Header component */}
     <div className={styles.container}>
       <h2 className={styles.title}>Submit Your Paper</h2>
       {renderMessage()}
@@ -169,6 +172,7 @@ const SubmitPaperPage = () => {
           {loading ? "Submitting..." : "Submit Paper"}
         </button>
       </form>
+    </div>
     </div>
   );
 };

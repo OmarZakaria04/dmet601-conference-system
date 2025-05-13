@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import "./ReviewFormPage.css";
+import Header from "../components/Header"; // Import Header component
 
 const ReviewFormPage = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const ReviewFormPage = () => {
         console.error("Error fetching reviewer data:", err);
         setMessage("Error fetching reviewer data.");
       });
-  }, [id]);
+  }, [id,reviewerEmail]);
 
   const handleSubmit = (e) => {
   e.preventDefault();
@@ -67,6 +68,8 @@ const ReviewFormPage = () => {
   };
 
   return (
+    <div>
+      <Header /> {/* ✅ Add the header here */}
     <div className="container">
       <h2 className="title">Review Paper</h2>
 
@@ -103,6 +106,7 @@ const ReviewFormPage = () => {
           Submit Review
         </button>
       </form>
+    </div>
     </div>
   );
 };
