@@ -7,6 +7,8 @@ const app = express();
 const assignmentRoutes = require("./routes/assignments");
 const reviewerRoutes = require("./routes/reviewers");
 const reviewRoutes = require("./routes/reviews");
+const authRoutes = require("./routes/auth");
+
 
 
 app.use(express.json());
@@ -16,6 +18,8 @@ app.use("/api/assignments", assignmentRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
 app.use("/api/papers", paperRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/auth", authRoutes);
+
 
 
 // MongoDB connection

@@ -5,6 +5,9 @@ import ReviewFormPage from "./pages/ReviewFormPage"; // Review form for specific
 import ChairDashboard from "./pages/ChairDashboard"; // Import ChairDashboard
 import AssignPdfPage from "./pages/AssignPdfPage"; // Page for assigning PDFs to reviewers
 import CheckFeedbackPage from "./pages/CheckFeedbackPage"; // Page to check reviewers' feedback
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+
 
 function App() {
   return (
@@ -27,6 +30,10 @@ function App() {
 
         {/* Route for checking feedback from reviewers */}
         <Route path="/checkfeedback" element={<CheckFeedbackPage />} />
+        {/* Login & Register */}
+<Route path="/login" element={<LoginPage />} />
+<Route path="/register" element={<RegisterPage />} />
+
       </Routes>
     </Router>
   );
