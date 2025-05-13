@@ -52,7 +52,7 @@ const ReviewFormPage = () => {
       setMessage("No PDF available for this paper.");
       return;
     }
-    window.open(pdfPath, "_blank");
+    window.open(`http://localhost:5000${pdfPath}`, "_blank");
   };
 
   return (
