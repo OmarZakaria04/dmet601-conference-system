@@ -4,7 +4,7 @@ import "./ReviewerDashboard.css";
 
 const ReviewerDashboard = () => {
   const [papers, setPapers] = useState([]);
-  const reviewerEmail = "reviewer2@conference.com";
+  const reviewerEmail = "reviewer4@conference.com";
   const navigate = useNavigate();
 
   useEffect(() => {
