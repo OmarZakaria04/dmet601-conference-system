@@ -61,7 +61,6 @@ function AdminPage() {
       <table>
         <thead>
           <tr>
-            <th>Username</th>
             <th>Email</th>
             <th>Role</th>
             <th>Actions</th>
@@ -70,7 +69,6 @@ function AdminPage() {
         <tbody>
           {users.map((user) => (
             <tr key={user._id}>
-              <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>
