@@ -17,28 +17,16 @@ const AssignPdfPage = () => {
       .then((data) => setReviewers(data))
       .catch((err) => console.error("Error fetching reviewers:", err));
 
-    fetchAssignablePapers();
-  }, []);
-
-  const fetchAssignablePapers = () => {
-    fetch("/api/papers/assignable")
+    fetch("/api/papers")
       .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setPapers(data);
-        } else {
-          setPapers([]); // Safe fallback if API returns message object
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching papers:", err);
-        setPapers([]);
-      });
-  };
+      .then((data) => setPapers(data.map(p => ({ id: p._id, title: p.title }))))
+      .catch((err) => console.error("Error fetching papers:", err));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Collect selected reviewers in array, remove empty, ensure uniqueness
     const selectedReviewers = [selectedReviewer1, selectedReviewer2, selectedReviewer3]
       .filter((email, index, self) => email && self.indexOf(email) === index);
 
@@ -52,6 +40,7 @@ const AssignPdfPage = () => {
       return;
     }
 
+    // Send the assignments one by one or in batch (assuming API is same as before)
     Promise.all(
       selectedReviewers.map((reviewerEmail) =>
         fetch("/api/assignments", {
@@ -65,18 +54,11 @@ const AssignPdfPage = () => {
       )
     )
       .then(() => {
-        setMessage("✅ Paper assigned successfully to selected reviewers.");
-        // Refresh papers list after assignment
-        fetchAssignablePapers();
-        // Clear selections
-        setSelectedPaper("");
-        setSelectedReviewer1("");
-        setSelectedReviewer2("");
-        setSelectedReviewer3("");
+        setMessage("Paper assigned successfully to selected reviewers.");
       })
       .catch((err) => {
         console.error("Error assigning paper:", err);
-        setMessage("❌ Error assigning paper.");
+        setMessage("Error assigning paper.");
       });
   };
 
@@ -93,18 +75,14 @@ const AssignPdfPage = () => {
             <select
               value={selectedPaper}
               onChange={(e) => setSelectedPaper(e.target.value)}
-              disabled={!papers.length}
             >
               <option value="">-- Choose Paper --</option>
               {papers.map((paper) => (
-                <option key={paper._id} value={paper._id}>
-                  {paper.title} ({paper.assignedReviewers?.length || 0} assigned)
+                <option key={paper.id} value={paper.id}>
+                  {paper.title} (ID: {paper.id})
                 </option>
               ))}
             </select>
-            {!papers.length && (
-              <p style={{ color: "red" }}>All papers have at least 2 reviewers assigned.</p>
-            )}
           </div>
 
           <div>
@@ -152,7 +130,7 @@ const AssignPdfPage = () => {
             </select>
           </div>
 
-          <button type="submit" disabled={!papers.length}>Assign</button>
+          <button type="submit">Assign</button>
         </form>
       </div>
     </div>
