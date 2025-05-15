@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,
-  role: { type: String, default: "user" },
+  role: { type: String},
 }, { collection: "Auth" }); // 👈 Force the collection name
 
 module.exports = mongoose.model("User", userSchema);

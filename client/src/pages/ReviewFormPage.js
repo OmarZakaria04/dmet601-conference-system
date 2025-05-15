@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom"; // ✅ Added useNavigate
 import "./ReviewFormPage.css";
-import Header from "../components/Header"; // Import Header component
 
 const ReviewFormPage = () => {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate(); // ✅ Added navigate
   const reviewerEmail = location.state?.reviewerEmail || "reviewer1@conference.com";
   const [pdfPath, setPdfPath] = useState("");
   const [grade, setGrade] = useState("");
@@ -13,7 +13,6 @@ const ReviewFormPage = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Fetch reviewer by email to get assigned PDFs
     fetch(`/api/reviewers/by-email/${reviewerEmail}`)
       .then((res) => res.json())
       .then((reviewer) => {
@@ -28,36 +27,37 @@ const ReviewFormPage = () => {
         console.error("Error fetching reviewer data:", err);
         setMessage("Error fetching reviewer data.");
       });
-  }, [id,reviewerEmail]);
+  }, [id]);
 
   const handleSubmit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!grade || !feedback) {
-    setMessage("Please fill in both grade and feedback.");
-    return;
-  }
+    if (!grade || !feedback) {
+      setMessage("Please fill in both grade and feedback.");
+      return;
+    }
 
-  fetch("/api/reviews", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      paperId: id,
-      grade,
-      feedback,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      setMessage(data.message || "Review submitted successfully!");
-      setGrade("");
-      setFeedback("");
+    fetch("/api/reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        paperId: id,
+        grade,
+        feedback,
+        reviewerEmail,
+      }),
     })
-    .catch((err) => {
-      console.error("❌ Submission error:", err);
-      setMessage("Error submitting review.");
-    });
-};
+      .then((res) => res.json())
+      .then((data) => {
+        alert(data.message || "Review submitted successfully!");
+        // ✅ Automatically go back to reviewer dashboard
+        navigate("/reviewerdashboard");
+      })
+      .catch((err) => {
+        console.error("❌ Submission error:", err);
+        setMessage("Error submitting review.");
+      });
+  };
 
   const handlePdfOpen = () => {
     if (!pdfPath) {
@@ -68,8 +68,6 @@ const ReviewFormPage = () => {
   };
 
   return (
-    <div>
-      <Header /> {/* ✅ Add the header here */}
     <div className="container">
       <h2 className="title">Review Paper</h2>
 
@@ -106,7 +104,6 @@ const ReviewFormPage = () => {
           Submit Review
         </button>
       </form>
-    </div>
     </div>
   );
 };

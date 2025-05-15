@@ -15,6 +15,7 @@ const authorSubmissionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  assignedReviewers: [String],
 }, { collection: "AuthorSubmission" }); // Keep your explicit collection name
 
 module.exports = mongoose.model("AuthorSubmission", authorSubmissionSchema, "AuthorSubmission");

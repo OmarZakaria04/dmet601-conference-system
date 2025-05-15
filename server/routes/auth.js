@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 // Register route
 router.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
@@ -12,7 +12,13 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const newUser = new User({ username, email, password, role: "user" }); // default role
+    const newUser = new User({
+      username,
+      email,
+      password,
+      role: role
+    });
+
     await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
 

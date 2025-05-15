@@ -8,7 +8,6 @@ const mongoose = require("mongoose");
 // GET paper by ID
 router.get("/:id", async (req, res) => {
   try {
-    // Validate ID and convert safely
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid paper ID." });
     }
@@ -25,10 +24,10 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Ensure /uploads folder exists (create it manually if needed)
+// Ensure /uploads folder exists
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../uploads")); // ✅ Always resolves correctly
+    cb(null, path.join(__dirname, "../uploads"));
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -43,6 +42,7 @@ const upload = multer({
   },
 });
 
+// POST submit paper
 router.post("/submit", upload.single("pdf"), async (req, res) => {
   try {
     const {
@@ -66,6 +66,7 @@ router.post("/submit", upload.single("pdf"), async (req, res) => {
       },
       category,
       filePath: `/uploads/${req.file.filename}`,
+      assignedReviewers: [], // ✅ Initialize empty when paper is submitted
     });
 
     await paper.save();
@@ -75,10 +76,11 @@ router.post("/submit", upload.single("pdf"), async (req, res) => {
     res.status(500).json({ message: "Server error during submission." });
   }
 });
-// GET all papers (title + ID)
+
+// GET all papers (with assignedReviewers count)
 router.get("/", async (req, res) => {
   try {
-    const papers = await AuthorSubmission.find({}, "title _id");
+    const papers = await AuthorSubmission.find({}, "title _id assignedReviewers");
     if (!papers.length) {
       return res.status(404).json({ message: "No papers found" });
     }
@@ -89,5 +91,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+// ✅ NEW API: GET only assignable papers (less than 2 reviewers assigned)
+router.get("/assignable", async (req, res) => {
+  try {
+    const papers = await AuthorSubmission.find({
+      $or: [
+        { assignedReviewers: { $exists: false } },
+        { assignedReviewers: { $size: 0 } },
+        { assignedReviewers: { $size: 1 } },
+      ],
+    }, "title _id assignedReviewers");
+
+    if (!papers.length) {
+      return res.status(404).json({ message: "No assignable papers found" });
+    }
+
+    res.status(200).json(papers);
+  } catch (err) {
+    console.error("Error fetching assignable papers:", err);
+    res.status(500).json({ message: "Failed to fetch assignable papers." });
+  }
+});
 
 module.exports = router;

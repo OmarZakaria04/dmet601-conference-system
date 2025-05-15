@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import navigate hook
 import "./form.css";
 
 function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate(); // ✅ Use navigate hook
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,13 +20,11 @@ function LoginPage() {
 
     const data = await res.json();
     if (res.ok) {
-      const { email, role } = data.user; // Assuming the response contains the user object
+      const { email, role } = data.user;
 
-      // Save email and role to localStorage
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userRole", role);
 
-      // Redirect based on role
       if (role === "author") {
         window.location.href = "/submit";
       } else if (role === "reviewer") {
@@ -61,6 +61,26 @@ function LoginPage() {
         required
       />
       <button type="submit">Login</button>
+
+      {/* ✅ Added register link */}
+      <div style={{ marginTop: "20px", textAlign: "center" }}>
+        Don't have an account?{" "}
+        <button
+          type="button"
+          onClick={() => navigate("/register")}
+          style={{
+            color: "blue",
+            textDecoration: "underline",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            marginLeft: "5px"
+          }}
+        >
+          Register
+        </button>
+      </div>
     </form>
   );
 }
