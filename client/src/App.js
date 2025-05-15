@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SubmitPaperPage from "./pages/SubmitPaperPage";
 import ReviewerDashboard from "./pages/ReviewerDashboard";
 import ReviewFormPage from "./pages/ReviewFormPage";
@@ -9,38 +9,36 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import UserWaitingPage from "./pages/UserWaitingPage";
 import AdminPage from "./pages/AdminPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import NotAuthorizedPage from "./pages/NotAuthorizedPage"; // Import the component
 
-// ProtectedRoute component to restrict access to logged-in users only
-const ProtectedRoute = ({ children }) => {
-  const userEmail = localStorage.getItem("userEmail");
-  if (!userEmail) {
-    // Redirect to login page if not authenticated
-    return <Navigate to="/" replace />;
-  }
-  return children;
-};
+
+
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Public routes */}
+        <Route path="/not-authorized" element={<NotAuthorizedPage />} /> {/* Add this route */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Protected routes */}
+        {/* Author-only */}
         <Route
           path="/submit"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["author"]}>
               <SubmitPaperPage />
             </ProtectedRoute>
           }
         />
+
+        {/* Reviewer-only */}
         <Route
           path="/reviewerdashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["reviewer"]}>
               <ReviewerDashboard />
             </ProtectedRoute>
           }
@@ -48,15 +46,17 @@ function App() {
         <Route
           path="/review/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["reviewer"]}>
               <ReviewFormPage />
             </ProtectedRoute>
           }
         />
+
+        {/* Chair-only */}
         <Route
           path="/chairdashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["chair"]}>
               <ChairDashboard />
             </ProtectedRoute>
           }
@@ -64,7 +64,7 @@ function App() {
         <Route
           path="/assignpdf"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["chair"]}>
               <AssignPdfPage />
             </ProtectedRoute>
           }
@@ -72,23 +72,27 @@ function App() {
         <Route
           path="/checkfeedback"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["chair"]}>
               <CheckFeedbackPage />
             </ProtectedRoute>
           }
         />
+
+        {/* Admin-only */}
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["admin"]}>
               <AdminPage />
             </ProtectedRoute>
           }
         />
+
+        {/* Generic user role */}
         <Route
           path="/user"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRoles={["user"]}>
               <UserWaitingPage />
             </ProtectedRoute>
           }

@@ -1,15 +1,21 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, requiredRoles }) => {
   const userEmail = localStorage.getItem("userEmail");
+  const userRole = localStorage.getItem("userRole");
 
-  if (!userEmail) {
-    // If no user is logged in, redirect to login page
+  // Not logged in
+  if (!userEmail || !userRole) {
     return <Navigate to="/" replace />;
   }
 
-  // Otherwise, allow access
+  // Logged in but role is not allowed
+  if (requiredRoles && !requiredRoles.includes(userRole)) {
+   return <Navigate to="/not-authorized" replace />;
+
+  }
+
   return children;
 };
 
