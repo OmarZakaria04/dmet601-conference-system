@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User"); // ✅ Use User model instead
+const Reviewer = require("../models/Reviewer");
 
 // ✅ GET all reviewers — /api/reviewers
 router.get("/", async (req, res) => {
   try {
-    const reviewers = await User.find({ role: "reviewer" }, "username email _id");
+    const reviewers = await Reviewer.find({}, "name email _id");
     res.status(200).json(reviewers);
   } catch (err) {
     console.error("Error fetching reviewers:", err);
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 // ✅ GET a single reviewer by ID — /api/reviewers/:id
 router.get("/:id", async (req, res) => {
   try {
-    const reviewer = await User.findOne({ _id: req.params.id, role: "reviewer" });
+    const reviewer = await Reviewer.findById(req.params.id);
     if (!reviewer) {
       return res.status(404).json({ message: "Reviewer not found." });
     }
@@ -27,10 +27,10 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// ✅ GET reviewer by email — /api/reviewers/by-email/:email
+// Get reviewer by email
 router.get("/by-email/:email", async (req, res) => {
   try {
-    const reviewer = await User.findOne({ email: req.params.email, role: "reviewer" });
+    const reviewer = await Reviewer.findOne({ email: req.params.email });
     if (!reviewer) {
       return res.status(404).json({ message: "Reviewer not found." });
     }
