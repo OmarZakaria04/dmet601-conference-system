@@ -33,7 +33,7 @@ function RegisterPage() {
 
       if (res.ok) {
         alert(data.message);
-        navigate("/login"); // ✅ Automatically redirect after success
+        navigate("/"); // ✅ Automatically redirect after success
       } else {
         alert(data.message || "Registration failed");
       }
@@ -96,7 +96,7 @@ function RegisterPage() {
         Already have an account?{" "}
         <button
           type="button"
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/")}
           style={{
             color: "blue",
             textDecoration: "underline",
