@@ -26,7 +26,6 @@ const AssignPdfPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Collect selected reviewers in array, remove empty, ensure uniqueness
     const selectedReviewers = [selectedReviewer1, selectedReviewer2, selectedReviewer3]
       .filter((email, index, self) => email && self.indexOf(email) === index);
 
@@ -40,7 +39,6 @@ const AssignPdfPage = () => {
       return;
     }
 
-    // Send the assignments one by one or in batch (assuming API is same as before)
     Promise.all(
       selectedReviewers.map((reviewerEmail) =>
         fetch("/api/assignments", {
@@ -54,11 +52,11 @@ const AssignPdfPage = () => {
       )
     )
       .then(() => {
-        setMessage("Paper assigned successfully to selected reviewers.");
+        setMessage("✅ Paper assigned successfully to selected reviewers.");
       })
       .catch((err) => {
         console.error("Error assigning paper:", err);
-        setMessage("Error assigning paper.");
+        setMessage("❌ Error assigning paper.");
       });
   };
 
@@ -86,12 +84,12 @@ const AssignPdfPage = () => {
           </div>
 
           <div>
-            <label>Select Reviewer 1</label>
+            <label>Reviewer 1</label>
             <select
               value={selectedReviewer1}
               onChange={(e) => setSelectedReviewer1(e.target.value)}
             >
-              <option value="">-- Choose Reviewer 1 --</option>
+              <option value="">-- Select Reviewer 1 --</option>
               {reviewers.map((rev) => (
                 <option key={rev._id} value={rev.email}>
                   {rev.name} ({rev.email})
@@ -101,12 +99,12 @@ const AssignPdfPage = () => {
           </div>
 
           <div>
-            <label>Select Reviewer 2</label>
+            <label>Reviewer 2</label>
             <select
               value={selectedReviewer2}
               onChange={(e) => setSelectedReviewer2(e.target.value)}
             >
-              <option value="">-- Choose Reviewer 2 --</option>
+              <option value="">-- Select Reviewer 2 --</option>
               {reviewers.map((rev) => (
                 <option key={rev._id} value={rev.email}>
                   {rev.name} ({rev.email})
@@ -116,12 +114,12 @@ const AssignPdfPage = () => {
           </div>
 
           <div>
-            <label>Select Reviewer 3 (optional)</label>
+            <label>Reviewer 3 (optional)</label>
             <select
               value={selectedReviewer3}
               onChange={(e) => setSelectedReviewer3(e.target.value)}
             >
-              <option value="">-- Choose Reviewer 3 --</option>
+              <option value="">-- Select Reviewer 3 (optional) --</option>
               {reviewers.map((rev) => (
                 <option key={rev._id} value={rev.email}>
                   {rev.name} ({rev.email})
