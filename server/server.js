@@ -9,6 +9,8 @@ const reviewerRoutes = require("./routes/reviewers");
 const reviewRoutes = require("./routes/reviews");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require('./routes/admin'); // Add this line at the top
+const chairDecisionRoutes = require("./routes/chairDecision");
+
 
 
 app.use(express.json());
@@ -20,6 +22,8 @@ app.use("/api/papers", paperRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/api/admin', adminRoutes); // Add this line to your existing middleware setup
+app.use("/api/chair-decision", chairDecisionRoutes);
+
 
 
 // MongoDB connection

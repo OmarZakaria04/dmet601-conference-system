@@ -30,19 +30,39 @@ const CheckFeedbackPage = () => {
   };
 
   const handleSubmit = () => {
-    if (!selectedPaper || !decision) {
-      setMessage("Please select a decision.");
-      return;
-    }
+  if (!selectedPaper || !decision) {
+    setMessage("Please select a decision.");
+    return;
+  }
 
-    console.log({
+  // Compose the email using mailto
+  const subject = `Paper Decision: ${decision}`;
+  const body = `Dear ${selectedPaper.correspondingAuthor?.name || "Author"},\n\nYour paper titled "${selectedPaper.title}" has been ${decision}.\n\nRegards,\nConference Chair.`;
+  const mailtoLink = `mailto:${selectedPaper.correspondingAuthor?.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  // Open default email client
+  window.location.href = mailtoLink;
+
+  // ✅ You can still also store the decision in the DB (optional)
+  fetch("/api/chair-decision", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
       paperId: selectedPaper._id,
       decision,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setMessage(data.message || `Decision "${decision}" recorded for paper "${selectedPaper.title}".`);
+      setDecision("");
+    })
+    .catch((err) => {
+      console.error("Error submitting decision:", err);
+      setMessage("Error submitting decision.");
     });
+};
 
-    setMessage(`Decision "${decision}" recorded for paper "${selectedPaper.title}".`);
-    setDecision("");
-  };
 
   return (
     <div>
