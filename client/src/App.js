@@ -1,46 +1,98 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import SubmitPaperPage from "./pages/SubmitPaperPage";
 import ReviewerDashboard from "./pages/ReviewerDashboard";
-import ReviewFormPage from "./pages/ReviewFormPage"; // Review form for specific paper
-import ChairDashboard from "./pages/ChairDashboard"; // Import ChairDashboard
-import AssignPdfPage from "./pages/AssignPdfPage"; // Page for assigning PDFs to reviewers
-import CheckFeedbackPage from "./pages/CheckFeedbackPage"; // Page to check reviewers' feedback
+import ReviewFormPage from "./pages/ReviewFormPage";
+import ChairDashboard from "./pages/ChairDashboard";
+import AssignPdfPage from "./pages/AssignPdfPage";
+import CheckFeedbackPage from "./pages/CheckFeedbackPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import UserWaitingPage from "./pages/UserWaitingPage";
-import AdminPage from "./pages/AdminPage"; // Import Admin Page
+import AdminPage from "./pages/AdminPage";
 
-
+// ProtectedRoute component to restrict access to logged-in users only
+const ProtectedRoute = ({ children }) => {
+  const userEmail = localStorage.getItem("userEmail");
+  if (!userEmail) {
+    // Redirect to login page if not authenticated
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Route for submitting a paper */}
-        <Route path="/submit" element={<SubmitPaperPage />} />
-
-        {/* Route for the reviewer dashboard */}
-        <Route path="/reviewerdashboard" element={<ReviewerDashboard />} />
-
-        {/* Route for reviewing a paper, dynamically accepting an 'id' */}
-        <Route path="/review/:id" element={<ReviewFormPage />} />
-
-        {/* Route for Chair Dashboard */}
-        <Route path="/chairdashboard" element={<ChairDashboard />} />
-
-        {/* Route for assigning PDFs to reviewers */}
-        <Route path="/assignpdf" element={<AssignPdfPage />} />
-
-        {/* Route for checking feedback from reviewers */}
-        <Route path="/checkfeedback" element={<CheckFeedbackPage />} />
-        {/* Login & Register */}
-        <Route path="/login" element={<LoginPage />} />
+        {/* Public routes */}
+        <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        {/* Route for assigning PDFs to reviewers */}
-        <Route path="/admin" element={<AdminPage/>} />
-        {/* Route for assigning PDFs to reviewers */}
-        <Route path="/user" element={<UserWaitingPage />} />
 
+        {/* Protected routes */}
+        <Route
+          path="/submit"
+          element={
+            <ProtectedRoute>
+              <SubmitPaperPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reviewerdashboard"
+          element={
+            <ProtectedRoute>
+              <ReviewerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review/:id"
+          element={
+            <ProtectedRoute>
+              <ReviewFormPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chairdashboard"
+          element={
+            <ProtectedRoute>
+              <ChairDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/assignpdf"
+          element={
+            <ProtectedRoute>
+              <AssignPdfPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkfeedback"
+          element={
+            <ProtectedRoute>
+              <CheckFeedbackPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute>
+              <UserWaitingPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
