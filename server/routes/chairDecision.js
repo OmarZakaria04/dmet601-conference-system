@@ -41,13 +41,19 @@ router.post("/", async (req, res) => {
     }
 
     // Send notification email
-    try {
-      await sendEmail(emailOptions);
-      message += " Email notification sent.";
-    } catch (emailErr) {
-      console.error("❌ Error sending email:", emailErr);
-      message += " BUT failed to send email notification.";
-    }
+    // Send email
+try {
+  await sendEmail(emailOptions);
+  message += " Email notification sent.";
+
+  // ✅ Remove the submission after successful email
+  await AuthorSubmission.findByIdAndDelete(paperId);
+  message += " Author submission removed.";
+} catch (emailErr) {
+  console.error("❌ Error sending email:", emailErr);
+  message += " BUT failed to send email notification.";
+}
+
 
     return res.status(200).json({ message });
   } catch (err) {

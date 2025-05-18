@@ -11,21 +11,21 @@ const CheckFeedbackPage = () => {
 
   // Fetch all papers on mount
   useEffect(() => {
-  fetch("/api/papers/reviewed")
-    .then((res) => res.json())
-    .then((data) => {
-      if (Array.isArray(data)) {
-        setPapers(data);
-      } else {
-        console.warn("Expected an array of papers but got:", data);
+    fetch("/api/papers/reviewed")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setPapers(data);
+        } else {
+          console.warn("Expected an array of papers but got:", data);
+          setPapers([]);
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching papers:", err);
         setPapers([]);
-      }
-    })
-    .catch((err) => {
-      console.error("Error fetching papers:", err);
-      setPapers([]);
-    });
-}, []);
+      });
+  }, []);
 
   // When chair clicks "View Reviews"
   const handleViewReviews = (paper) => {
@@ -136,7 +136,17 @@ const CheckFeedbackPage = () => {
               </label>
             </div>
 
-            <button onClick={handleSubmit}>Submit Decision</button>
+            <button
+              onClick={handleSubmit}
+              disabled={reviews.length < 2 || !decision}
+            >
+              Submit Decision
+            </button>
+            {reviews.length < 2 && (
+              <p style={{ color: "red", marginTop: "8px" }}>
+                At least 2 reviews are required to submit a decision.
+              </p>
+            )}
           </div>
         )}
       </div>
