@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ChairDecision = require("../models/chairDecision");
 const AuthorSubmission = require("../models/AuthorSubmission");
-const SubmittedReview = require("../models/SubmittedReview"); // add this
+const SubmittedReview = require("../models/submittedReview"); // add this
 const { sendEmail } = require("../utils/emailService"); // adjust path as needed
 
 router.post("/", async (req, res) => {
