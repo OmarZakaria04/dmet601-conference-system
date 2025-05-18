@@ -1,0 +1,89 @@
+/* LoginPageStyled.css */
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #fef8f5;
+}
+
+.login-full-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.login-graphic-section {
+  flex: 1;
+  background-color: #fef8f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-graphic {
+  max-width: 60%;
+  height: auto;
+}
+
+.login-form-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top-left-radius: 24px;
+  border-bottom-left-radius: 24px;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.05);
+  
+}
+
+.system-title {
+  font-size: 70px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #1d1d1d;
+}
+
+.login-form-box input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.login-submit-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-submit-button:hover {
+  background-color: #1e50c1;
+}
+
+.register-line {
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.signup-button {
+  margin-left: 5px;
+  color: #2563eb;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+}

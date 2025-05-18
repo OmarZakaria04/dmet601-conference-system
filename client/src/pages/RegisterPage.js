@@ -1,8 +1,9 @@
+// RegisterPageStyled.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./form.css";
+import "./RegisterPage.css";
 
-function RegisterPage() {
+function RegisterPageStyled() {
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -33,7 +34,7 @@ function RegisterPage() {
 
       if (res.ok) {
         alert(data.message);
-        navigate("/"); // ✅ Automatically redirect after success
+        navigate("/");
       } else {
         alert(data.message || "Registration failed");
       }
@@ -44,74 +45,73 @@ function RegisterPage() {
   };
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <h2>Register</h2>
-      <input
-        name="username"
-        placeholder="Username"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
-
-      <div>
-        <label>
-          <input
-            type="radio"
-            name="role"
-            value="user"
-            checked={form.role === "user"}
-            onChange={handleChange}
-          />
-          User
-        </label>
-        <label style={{ marginLeft: "20px" }}>
-          <input
-            type="radio"
-            name="role"
-            value="author"
-            checked={form.role === "author"}
-            onChange={handleChange}
-          />
-          Author
-        </label>
+    <div className="register-full-container">
+      <div className="register-image-section">
+        <img src="/signup-illustration.png" alt="Sign up illustration" className="register-graphic" />
       </div>
+      <div className="register-form-section">
+        <h2 className="register-title">Create Your Account</h2>
+        <form onSubmit={handleSubmit} className="register-form-box">
+          <input
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
 
-      <button type="submit">Register</button>
+          <div className="role-section">
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="user"
+                checked={form.role === "user"}
+                onChange={handleChange}
+              />
+              User
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="author"
+                checked={form.role === "author"}
+                onChange={handleChange}
+              />
+              Author
+            </label>
+          </div>
 
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
-        Already have an account?{" "}
-        <button
-          type="button"
-          onClick={() => navigate("/")}
-          style={{
-            color: "blue",
-            textDecoration: "underline",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            marginLeft: "5px"
-          }}
-        >
-          Sign In
-        </button>
+          <button type="submit" className="register-button">Register</button>
+
+          <div className="login-redirect">
+            Already have an account?
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="signin-link"
+            >
+              Sign In
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
 
-export default RegisterPage;
+export default RegisterPageStyled;

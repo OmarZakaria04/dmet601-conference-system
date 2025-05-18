@@ -1,10 +1,11 @@
+// LoginPageStyled.js
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Import navigate hook
-import "./form.css";
+import { useNavigate } from "react-router-dom";
+import "./LoginPage.css";
 
 function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
-  const navigate = useNavigate(); // ✅ Use navigate hook
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,44 +45,41 @@ function LoginPage() {
   };
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Login</button>
-
-      {/* ✅ Added register link */}
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
-        Don't have an account?{" "}
-        <button
-          type="button"
-          onClick={() => navigate("/register")}
-          style={{
-            color: "blue",
-            textDecoration: "underline",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 0,
-            marginLeft: "5px"
-          }}
-        >
-          Register
-        </button>
+    <div className="login-full-container">
+      <div className="login-graphic-section">
+        <img src="/login-illustration.png" alt="Conference illustration" className="login-graphic" />
       </div>
-    </form>
+      <div className="login-form-section">
+        <h2 className="system-title">Conference System</h2>
+        <form className="login-form-box" onSubmit={handleSubmit}>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email address"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" className="login-submit-button">Sign in</button>
+        </form>
+        <div className="register-line">
+          Don't have an account?
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="signup-button"
+          >
+            Sign up
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
