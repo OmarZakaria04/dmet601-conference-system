@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const ChairDecision = require("../models/chairDecision");
 const AuthorSubmission = require("../models/AuthorSubmission");
+const SubmittedReview = require("../models/SubmittedReview"); // add this
 const { sendEmail } = require("../utils/emailService"); // adjust path as needed
 
-// ✅ POST - Chair submits decision (approve/decline)
 router.post("/", async (req, res) => {
   try {
     const { paperId, decision } = req.body;
@@ -18,12 +18,30 @@ router.post("/", async (req, res) => {
       return res.status(404).json({ message: "Paper not found." });
     }
 
-    // Compose email details
+    // Fetch all reviews for this paper
+    const reviews = await SubmittedReview.find({ paperId });
+
+    // Format reviews for email body
+    let reviewsText = "Reviews Summary:\n\n";
+    if (reviews.length === 0) {
+      reviewsText += "No reviews available.\n";
+    } else {
+      reviews.forEach((review, idx) => {
+        reviewsText += `Reviewer #${idx + 1}:\n`;
+        reviewsText += `Grade: ${review.grade}\n`;
+        reviewsText += `Feedback: ${review.feedback}\n\n`;
+      });
+    }
+
+    // Compose email details including reviews
     const emailOptions = {
       from: '"Conference Chair" <dmet491@gmail.com>', // replace with your sender email
-      to: paper.correspondingAuthor?.email, 
+      to: paper.correspondingAuthor?.email,
       subject: `Paper Decision: ${decision}`,
-      text: `Dear ${paper.correspondingAuthor?.name || "Author"},\n\nYour paper titled "${paper.title}" has been ${decision}.\n\nRegards,\nConference Chair.`,
+      text: `Dear ${paper.correspondingAuthor?.name || "Author"},\n\n` +
+            `Your paper titled "${paper.title}" has been ${decision}.\n\n` +
+            `${reviewsText}` +
+            `Regards,\nConference Chair.`,
     };
 
     // Save or update decision in DB
@@ -41,19 +59,17 @@ router.post("/", async (req, res) => {
     }
 
     // Send notification email
-    // Send email
-try {
-  await sendEmail(emailOptions);
-  message += " Email notification sent.";
+    try {
+      await sendEmail(emailOptions);
+      message += " Email notification sent.";
 
-  // ✅ Remove the submission after successful email
-  await AuthorSubmission.findByIdAndDelete(paperId);
-  message += " Author submission removed.";
-} catch (emailErr) {
-  console.error("❌ Error sending email:", emailErr);
-  message += " BUT failed to send email notification.";
-}
-
+      // Remove the submission after successful email
+      await AuthorSubmission.findByIdAndDelete(paperId);
+      message += " Author submission removed.";
+    } catch (emailErr) {
+      console.error("❌ Error sending email:", emailErr);
+      message += " BUT failed to send email notification.";
+    }
 
     return res.status(200).json({ message });
   } catch (err) {

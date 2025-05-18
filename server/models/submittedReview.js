@@ -19,4 +19,5 @@ const submittedReviewSchema = new mongoose.Schema({
   },
 }, { collection: "submittedReview" });
 
-module.exports = mongoose.model("SubmittedReview", submittedReviewSchema, "submittedReview");
+// Check if model already exists, otherwise create it
+module.exports = mongoose.models.SubmittedReview || mongoose.model("SubmittedReview", submittedReviewSchema, "submittedReview");
