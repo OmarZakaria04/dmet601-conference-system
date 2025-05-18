@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./AssignPdfPage.css";
 import Header from "../components/Header";
 
@@ -10,6 +11,8 @@ const AssignPdfPage = () => {
   const [selectedReviewer2, setSelectedReviewer2] = useState("");
   const [selectedReviewer3, setSelectedReviewer3] = useState("");
   const [message, setMessage] = useState("");
+
+  const navigate = useNavigate(); // for Back button
 
   useEffect(() => {
     fetch("/api/reviewers")
@@ -30,12 +33,12 @@ const AssignPdfPage = () => {
       .filter((email, index, self) => email && self.indexOf(email) === index);
 
     if (!selectedPaper) {
-      setMessage("Please select a paper.");
+      setMessage("❌ Please select a paper.");
       return;
     }
 
     if (selectedReviewers.length < 2) {
-      setMessage("Please select at least 2 different reviewers.");
+      setMessage("❌ Please select at least 2 different reviewers.");
       return;
     }
 
@@ -61,20 +64,21 @@ const AssignPdfPage = () => {
   };
 
   return (
-    <div>
+    <div className="assign-pdf-page">
       <Header />
-      <div className="assign-pdf-container">
-        <h2>Assign Paper to Reviewers</h2>
-        {message && <p>{message}</p>}
+      <div className="assign-container">
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          ← Back
+        </button>
 
-        <form onSubmit={handleSubmit} className="assign-pdf-form">
-          <div>
+        <h2>Assign PDF to Reviewers</h2>
+        {message && <p className="assign-message">{message}</p>}
+
+        <form onSubmit={handleSubmit} className="assign-form">
+          <div className="form-group">
             <label>Select Paper</label>
-            <select
-              value={selectedPaper}
-              onChange={(e) => setSelectedPaper(e.target.value)}
-            >
-              <option value="">-- Choose Paper --</option>
+            <select value={selectedPaper} onChange={(e) => setSelectedPaper(e.target.value)}>
+              <option value="">— Choose Paper —</option>
               {papers.map((paper) => (
                 <option key={paper.id} value={paper.id}>
                   {paper.title} (ID: {paper.id})
@@ -83,13 +87,10 @@ const AssignPdfPage = () => {
             </select>
           </div>
 
-          <div>
+          <div className="form-group">
             <label>Reviewer 1</label>
-            <select
-              value={selectedReviewer1}
-              onChange={(e) => setSelectedReviewer1(e.target.value)}
-            >
-              <option value="">-- Select Reviewer 1 --</option>
+            <select value={selectedReviewer1} onChange={(e) => setSelectedReviewer1(e.target.value)}>
+              <option value="">— Select Reviewer 1 —</option>
               {reviewers.map((rev) => (
                 <option key={rev._id} value={rev.email}>
                   {rev.name} ({rev.email})
@@ -98,13 +99,10 @@ const AssignPdfPage = () => {
             </select>
           </div>
 
-          <div>
+          <div className="form-group">
             <label>Reviewer 2</label>
-            <select
-              value={selectedReviewer2}
-              onChange={(e) => setSelectedReviewer2(e.target.value)}
-            >
-              <option value="">-- Select Reviewer 2 --</option>
+            <select value={selectedReviewer2} onChange={(e) => setSelectedReviewer2(e.target.value)}>
+              <option value="">— Select Reviewer 2 —</option>
               {reviewers.map((rev) => (
                 <option key={rev._id} value={rev.email}>
                   {rev.name} ({rev.email})
@@ -113,13 +111,10 @@ const AssignPdfPage = () => {
             </select>
           </div>
 
-          <div>
+          <div className="form-group">
             <label>Reviewer 3 (optional)</label>
-            <select
-              value={selectedReviewer3}
-              onChange={(e) => setSelectedReviewer3(e.target.value)}
-            >
-              <option value="">-- Select Reviewer 3 (optional) --</option>
+            <select value={selectedReviewer3} onChange={(e) => setSelectedReviewer3(e.target.value)}>
+              <option value="">— Select Reviewer 3 (optional) —</option>
               {reviewers.map((rev) => (
                 <option key={rev._id} value={rev.email}>
                   {rev.name} ({rev.email})
@@ -128,7 +123,7 @@ const AssignPdfPage = () => {
             </select>
           </div>
 
-          <button type="submit">Assign</button>
+          <button type="submit" className="assign-btn">Assign</button>
         </form>
       </div>
     </div>

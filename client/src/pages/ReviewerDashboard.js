@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ReviewerDashboard.css";
-import Header from "../components/Header"; // Import Header component
-import "../components/Header.css"; // Import Header CSS for styling
+import Header from "../components/Header";
 
 const ReviewerDashboard = () => {
   const [papers, setPapers] = useState([]);
-  const reviewerEmail = localStorage.getItem("userEmail"); // Get email from localStorage
+  const reviewerEmail = localStorage.getItem("userEmail");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!reviewerEmail) {
-      // Redirect to login if no email is found in localStorage
       window.location.href = "/login";
       return;
     }
 
-    // Fetch the reviewer data by email
     fetch(`/api/reviewers/by-email/${reviewerEmail}`)
       .then((res) => res.json())
       .then((reviewer) => {
@@ -24,7 +21,6 @@ const ReviewerDashboard = () => {
           setPapers([]);
           return;
         }
-
         setPapers(reviewer.PDF_IDs);
       })
       .catch((err) => {
@@ -33,29 +29,33 @@ const ReviewerDashboard = () => {
   }, [reviewerEmail]);
 
   return (
-    
-    <div>
-      <Header /> {/* ✅ Add the header here */}
-      <div className="container">
-        <h2 className="title">Reviewer Dashboard</h2>
+    <div className="reviewer-dashboard">
+      <Header />
+      <div className="reviewer-container">
+        <h2 className="dashboard-title">Reviewer Dashboard</h2>
+
         {papers.length === 0 ? (
-          <p>No assigned papers found.</p>
+          <p className="no-papers">No assigned papers found.</p>
         ) : (
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="paper-table">
             <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-2">Title</th>
-                <th className="border p-2">PDF</th>
+              <tr>
+                <th>Paper Title</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {papers.map((paper, index) => (
                 <tr key={index}>
-                  <td className="border p-2">{paper.title}</td>
-                  <td className="border p-2">
+                  <td>{paper.title}</td>
+                  <td>
                     <button
-                      className="reviewButton"
-                      onClick={() => navigate(`/review/${paper.paperId}`, { state: { reviewerEmail } })}
+                      className="review-btn"
+                      onClick={() =>
+                        navigate(`/review/${paper.paperId}`, {
+                          state: { reviewerEmail },
+                        })
+                      }
                     >
                       Review Paper
                     </button>

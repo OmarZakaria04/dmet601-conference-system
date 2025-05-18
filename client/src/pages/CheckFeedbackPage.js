@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import "./CheckFeedbackPage.css";
 
@@ -8,26 +9,18 @@ const CheckFeedbackPage = () => {
   const [reviews, setReviews] = useState([]);
   const [decision, setDecision] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); // for Back button
 
-  // Fetch all papers on mount
   useEffect(() => {
     fetch("/api/papers/reviewed")
       .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setPapers(data);
-        } else {
-          console.warn("Expected an array of papers but got:", data);
-          setPapers([]);
-        }
-      })
+      .then((data) => setPapers(Array.isArray(data) ? data : []))
       .catch((err) => {
         console.error("Error fetching papers:", err);
         setPapers([]);
       });
   }, []);
 
-  // When chair clicks "View Reviews"
   const handleViewReviews = (paper) => {
     setSelectedPaper(paper);
     fetch(`/api/reviews/by-paper/${paper._id}`)
@@ -35,56 +28,58 @@ const CheckFeedbackPage = () => {
       .then((data) => setReviews(data))
       .catch((err) => {
         console.error("Error fetching reviews:", err);
-        setReviews([]); // Clear reviews if error or none found
+        setReviews([]);
       });
   };
 
   const handleSubmit = () => {
     if (!selectedPaper || !decision) {
-      setMessage("Please select a decision.");
+      setMessage("❌ Please select a decision.");
       return;
     }
 
-    // Send decision to backend, backend sends the email
     fetch("/api/chair-decision", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        paperId: selectedPaper._id,
-        decision,
-      }),
+      body: JSON.stringify({ paperId: selectedPaper._id, decision }),
     })
       .then((res) => res.json())
       .then((data) => {
-        setMessage(data.message || `Decision "${decision}" recorded for paper "${selectedPaper.title}".`);
+        setMessage(data.message || `✅ Decision "${decision}" recorded for paper "${selectedPaper.title}".`);
         setDecision("");
       })
       .catch((err) => {
         console.error("Error submitting decision:", err);
-        setMessage("Error submitting decision.");
+        setMessage("❌ Error submitting decision.");
       });
   };
 
   return (
-    <div>
+    <div className="check-feedback-page">
       <Header />
-      <div className="check-feedback-container">
-        <h2>Check Papers & Reviews</h2>
-        {message && <p>{message}</p>}
+      <div className="feedback-container">
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          ← Back
+        </button>
 
-        <table className="w-full border-collapse border border-gray-300">
+        <h2>Check Papers & Reviews</h2>
+        {message && <p className="message">{message}</p>}
+
+        <table className="papers-table">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2">Paper Title</th>
-              <th className="border p-2">Action</th>
+            <tr>
+              <th>Paper Title</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {papers.map((paper) => (
               <tr key={paper._id}>
-                <td className="border p-2">{paper.title}</td>
-                <td className="border p-2">
-                  <button onClick={() => handleViewReviews(paper)}>View Reviews</button>
+                <td>{paper.title}</td>
+                <td>
+                  <button className="view-btn" onClick={() => handleViewReviews(paper)}>
+                    View Reviews
+                  </button>
                 </td>
               </tr>
             ))}
@@ -92,12 +87,12 @@ const CheckFeedbackPage = () => {
         </table>
 
         {selectedPaper && (
-          <div className="feedback-table-section">
+          <div className="review-section">
             <h3>Reviews for: {selectedPaper.title}</h3>
             {reviews.length === 0 ? (
               <p>No reviews found for this paper yet.</p>
             ) : (
-              <table className="feedback-table">
+              <table className="reviews-table">
                 <thead>
                   <tr>
                     <th>Grade</th>
@@ -115,7 +110,7 @@ const CheckFeedbackPage = () => {
               </table>
             )}
 
-            <div className="decision-buttons">
+            <div className="decision-group">
               <label>
                 <input
                   type="radio"
@@ -137,15 +132,15 @@ const CheckFeedbackPage = () => {
             </div>
 
             <button
+              className="submit-btn"
               onClick={handleSubmit}
               disabled={reviews.length < 2 || !decision}
             >
               Submit Decision
             </button>
+
             {reviews.length < 2 && (
-              <p style={{ color: "red", marginTop: "8px" }}>
-                At least 2 reviews are required to submit a decision.
-              </p>
+              <p className="warning">⚠️ At least 2 reviews are required to submit a decision.</p>
             )}
           </div>
         )}
