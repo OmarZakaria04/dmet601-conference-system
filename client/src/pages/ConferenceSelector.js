@@ -55,7 +55,7 @@ const ConferenceSelector = () => {
       <h2 className="conference-title">Select a Conference to Submit Your Paper</h2>
       <div>
         {conferences.map((conf) => {
-          const disabled = isDeadlinePassed(conf.deadline);
+          const disabled = isDeadlinePassed(conf.deadline)|| today < new Date(conf.date);;
           const status = getStatus(conf);
 
           return (
