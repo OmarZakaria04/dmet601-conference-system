@@ -30,6 +30,7 @@ const authMiddleware = (req, res, next) => {
 
 app.use(express.json());
 app.use(cors());
+app.use(authMiddleware);
 app.use("/api/reviewers", reviewerRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
@@ -39,7 +40,6 @@ app.use("/api/auth", authRoutes);
 app.use('/api/admin', adminRoutes); // Add this line to your existing middleware setup
 app.use("/api/chair-decision", chairDecisionRoutes);
 app.use("/api/conferences", conferenceRoutes); // Add this line to your existing middleware setup
-app.use(authMiddleware);
 
 async function autoCreateConference() {
   try {
