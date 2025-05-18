@@ -22,7 +22,8 @@ function LoginPage() {
     const data = await res.json();
     if (res.ok) {
       const { email, role } = data.user;
-
+      const token = data.token; // ✅ Get the token
+      localStorage.setItem("token", token);
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userRole", role);
 

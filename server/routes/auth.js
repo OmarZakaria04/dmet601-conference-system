@@ -4,9 +4,9 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = "your_jwt_secret_key"; // 🔐 Move to env in production
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key"; // ✅ Move to .env in production
 
-// Register route (already hashes password via mongoose middleware)
+// ✅ REGISTER ROUTE
 router.post('/register', async (req, res) => {
   const { username, email, password, role } = req.body;
 
@@ -21,11 +21,12 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
+    console.error("Registration error:", err);
     res.status(500).json({ message: "Server error during registration" });
   }
 });
 
-// Login route with bcrypt + JWT
+// ✅ LOGIN ROUTE WITH JWT
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -36,6 +37,7 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
+    // ✅ Generate JWT
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       JWT_SECRET,
@@ -53,6 +55,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ message: "Server error during login" });
   }
 });
