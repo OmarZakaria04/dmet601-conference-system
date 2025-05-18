@@ -1,7 +1,8 @@
+// SubmitPaperPage.js
 import React, { useState } from "react";
 import axios from "axios";
-import styles from "./SubmitPaperPage.module.css"; // Adjust the path
-import Header from "../components/Header"; // Import Header component
+import "./SubmitPaperPage.css"; // ✅ Use new CSS file
+import Header from "../components/Header"; // ✅ Import Header component
 
 const SubmitPaperPage = () => {
   const [title, setTitle] = useState("");
@@ -9,7 +10,7 @@ const SubmitPaperPage = () => {
   const [keywords, setKeywords] = useState("");
   const [authors, setAuthors] = useState("");
   const [correspondingAuthor, setCorrespondingAuthor] = useState("");
-  const [correspondingAuthorEmail, setCorrespondingAuthorEmail] = useState(""); // Added state for email
+  const [correspondingAuthorEmail, setCorrespondingAuthorEmail] = useState("");
   const [category, setCategory] = useState("");
   const [pdfFile, setPdfFile] = useState(null);
   const [message, setMessage] = useState("");
@@ -18,13 +19,11 @@ const SubmitPaperPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!title || !abstract || !keywords || !authors || !correspondingAuthor || !correspondingAuthorEmail || !category || !pdfFile) {
       setMessage("Please fill in all fields.");
       return;
     }
 
-    // Extra validation: file size/type
     if (!pdfFile.name.endsWith(".pdf")) {
       setMessage("Only PDF files are allowed.");
       return;
@@ -41,7 +40,7 @@ const SubmitPaperPage = () => {
     formData.append("keywords", keywords);
     formData.append("authors", authors);
     formData.append("correspondingAuthor", correspondingAuthor);
-    formData.append("correspondingAuthorEmail", correspondingAuthorEmail); // Added email
+    formData.append("correspondingAuthorEmail", correspondingAuthorEmail);
     formData.append("category", category);
     formData.append("pdf", pdfFile);
 
@@ -54,13 +53,12 @@ const SubmitPaperPage = () => {
         },
       });
       setMessage("success: Paper submitted successfully!");
-      // Clear form
       setTitle("");
       setAbstract("");
       setKeywords("");
       setAuthors("");
       setCorrespondingAuthor("");
-      setCorrespondingAuthorEmail(""); // Clear email
+      setCorrespondingAuthorEmail("");
       setCategory("");
       setPdfFile(null);
     } catch (err) {
@@ -74,105 +72,55 @@ const SubmitPaperPage = () => {
   const renderMessage = () => {
     if (!message) return null;
     const [type, text] = message.includes(":") ? message.split(":") : ["error", message];
-    const color = type === "success" ? styles.success : styles.error;
-    return <p className={`${styles.message} ${color}`}>{text.trim()}</p>;
+    const className = type === "success" ? "message success" : "message error";
+    return <p className={className}>{text.trim()}</p>;
   };
 
   return (
     <div>
-      <Header /> {/* Add Header component */}
-    <div className={styles.container}>
-      <h2 className={styles.title}>Submit Your Paper</h2>
-      {renderMessage()}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Paper Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className={styles.inputField}
-          />
+      <Header />
+      <div className="submit-container">
+        <div className="submit-card">
+          <h2 className="submit-title">Submit Your Paper</h2>
+          {renderMessage()}
+          <form onSubmit={handleSubmit} className="submit-form">
+            <label>Paper Title</label>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+
+            <label>Abstract</label>
+            <textarea value={abstract} onChange={(e) => setAbstract(e.target.value)} rows={4} required />
+
+            <label>Keywords</label>
+            <input type="text" value={keywords} onChange={(e) => setKeywords(e.target.value)} required />
+
+            <label>Authors (names, affiliations, emails)</label>
+            <textarea value={authors} onChange={(e) => setAuthors(e.target.value)} rows={3} required />
+
+            <label>Corresponding Author</label>
+            <input type="text" value={correspondingAuthor} onChange={(e) => setCorrespondingAuthor(e.target.value)} required />
+
+            <label>Corresponding Author Email</label>
+            <input type="email" value={correspondingAuthorEmail} onChange={(e) => setCorrespondingAuthorEmail(e.target.value)} required />
+
+            <label>Submission Category</label>
+            <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+              <option value="">Select Category</option>
+              <option value="AI">Artificial Intelligence</option>
+              <option value="Networks">Computer Networks</option>
+              <option value="Security">Cybersecurity</option>
+              <option value="HCI">Human-Computer Interaction</option>
+            </select>
+
+            <label>Upload PDF (4–8 pages)</label>
+            <input type="file" accept="application/pdf" onChange={(e) => setPdfFile(e.target.files[0])} required />
+            {pdfFile && <p className="file-preview">Selected: {pdfFile.name}</p>}
+
+            <button type="submit" disabled={loading} className="submit-button">
+              {loading ? "Submitting..." : "Submit Paper"}
+            </button>
+          </form>
         </div>
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Abstract</label>
-          <textarea
-            value={abstract}
-            onChange={(e) => setAbstract(e.target.value)}
-            className={styles.textareaField}
-            rows={4}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Keywords</label>
-          <input
-            type="text"
-            value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
-            className={styles.inputField}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Authors (names, affiliations, emails)</label>
-          <textarea
-            value={authors}
-            onChange={(e) => setAuthors(e.target.value)}
-            className={styles.textareaField}
-            rows={3}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Corresponding Author</label>
-          <input
-            type="text"
-            value={correspondingAuthor}
-            onChange={(e) => setCorrespondingAuthor(e.target.value)}
-            className={styles.inputField}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Corresponding Author Email</label>
-          <input
-            type="email"
-            value={correspondingAuthorEmail}
-            onChange={(e) => setCorrespondingAuthorEmail(e.target.value)}
-            className={styles.inputField}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Submission Category</label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className={styles.selectField}
-          >
-            <option value="">Select Category</option>
-            <option value="AI">Artificial Intelligence</option>
-            <option value="Networks">Computer Networks</option>
-            <option value="Security">Cybersecurity</option>
-            <option value="HCI">Human-Computer Interaction</option>
-          </select>
-        </div>
-        <div className={styles.formGroup}>
-          <label className="font-semibold">Upload PDF (4–8 pages)</label>
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={(e) => setPdfFile(e.target.files[0])}
-            className={styles.inputField}
-          />
-          {pdfFile && <p className="text-sm text-gray-600 mt-1">Selected: {pdfFile.name}</p>}
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className={styles.submitButton}
-        >
-          {loading ? "Submitting..." : "Submit Paper"}
-        </button>
-      </form>
-    </div>
+      </div>
     </div>
   );
 };
