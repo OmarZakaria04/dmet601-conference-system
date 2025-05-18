@@ -1,30 +1,12 @@
 const express = require("express");
+const router = express.Router();
 const multer = require("multer");
 const path = require("path");
-const AuthorSubmission = require("../models/AuthorSubmission");
-const router = express.Router();
 const mongoose = require("mongoose");
+const AuthorSubmission = require("../models/AuthorSubmission");
+const SubmittedReview = require("../models/submittedReview");
 
-// GET paper by ID
-router.get("/:id", async (req, res) => {
-  try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ message: "Invalid paper ID." });
-    }
-
-    const paper = await AuthorSubmission.findById(req.params.id);
-    if (!paper) {
-      return res.status(404).json({ message: "Paper not found." });
-    }
-
-    res.status(200).json(paper);
-  } catch (err) {
-    console.error("Error fetching paper:", err);
-    res.status(500).json({ message: "Error fetching paper." });
-  }
-});
-
-// Ensure /uploads folder exists
+// Configure multer for PDF uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../uploads"));
@@ -42,7 +24,7 @@ const upload = multer({
   },
 });
 
-// POST submit paper
+// ✅ POST - Submit a new paper
 router.post("/submit", upload.single("pdf"), async (req, res) => {
   try {
     const {
@@ -53,6 +35,8 @@ router.post("/submit", upload.single("pdf"), async (req, res) => {
       correspondingAuthor,
       correspondingAuthorEmail,
       category,
+      conferenceId,
+      conferenceName,
     } = req.body;
 
     const paper = new AuthorSubmission({
@@ -66,7 +50,9 @@ router.post("/submit", upload.single("pdf"), async (req, res) => {
       },
       category,
       filePath: `/uploads/${req.file.filename}`,
-      assignedReviewers: [], // ✅ Initialize empty when paper is submitted
+      conferenceId,
+      conferenceName,
+      assignedReviewers: [],
     });
 
     await paper.save();
@@ -77,10 +63,10 @@ router.post("/submit", upload.single("pdf"), async (req, res) => {
   }
 });
 
-// GET all papers (with assignedReviewers count)
+// ✅ GET - All papers (minimal info)
 router.get("/", async (req, res) => {
   try {
-    const papers = await AuthorSubmission.find({}, "title _id assignedReviewers");
+    const papers = await AuthorSubmission.find({}, "title _id assignedReviewers conferenceName");
     if (!papers.length) {
       return res.status(404).json({ message: "No papers found" });
     }
@@ -91,16 +77,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ NEW API: GET only assignable papers (less than 2 reviewers assigned)
+// ✅ GET - Papers that can still be assigned (less than 2 reviewers)
 router.get("/assignable", async (req, res) => {
   try {
-    const papers = await AuthorSubmission.find({
-      $or: [
-        { assignedReviewers: { $exists: false } },
-        { assignedReviewers: { $size: 0 } },
-        { assignedReviewers: { $size: 1 } },
-      ],
-    }, "title _id assignedReviewers");
+    const papers = await AuthorSubmission.find(
+      {
+        $or: [
+          { assignedReviewers: { $exists: false } },
+          { assignedReviewers: { $size: 0 } },
+          { assignedReviewers: { $size: 1 } },
+        ],
+      },
+      "title _id assignedReviewers"
+    );
 
     if (!papers.length) {
       return res.status(404).json({ message: "No assignable papers found" });
@@ -110,6 +99,46 @@ router.get("/assignable", async (req, res) => {
   } catch (err) {
     console.error("Error fetching assignable papers:", err);
     res.status(500).json({ message: "Failed to fetch assignable papers." });
+  }
+});
+
+// ✅ GET - Papers with at least one submitted review
+router.get("/reviewed", async (req, res) => {
+  try {
+    const reviewedPaperIds = await SubmittedReview.distinct("paperId");
+
+    if (reviewedPaperIds.length === 0) {
+      return res.status(404).json({ message: "No reviewed papers found." });
+    }
+
+    const reviewedPapers = await AuthorSubmission.find(
+      { _id: { $in: reviewedPaperIds } },
+      "title _id assignedReviewers conferenceName"
+    );
+
+    res.status(200).json(reviewedPapers);
+  } catch (err) {
+    console.error("Error fetching reviewed papers:", err);
+    res.status(500).json({ message: "Failed to fetch reviewed papers." });
+  }
+});
+
+// ✅ GET - Specific paper by ID
+router.get("/:id", async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid paper ID." });
+    }
+
+    const paper = await AuthorSubmission.findById(req.params.id);
+    if (!paper) {
+      return res.status(404).json({ message: "Paper not found." });
+    }
+
+    res.status(200).json(paper);
+  } catch (err) {
+    console.error("Error fetching paper:", err);
+    res.status(500).json({ message: "Error fetching paper." });
   }
 });
 

@@ -1,10 +1,15 @@
-// SubmitPaperPage.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./SubmitPaperPage.css"; // ✅ Use new CSS file
-import Header from "../components/Header"; // ✅ Import Header component
+import { useLocation, useNavigate } from "react-router-dom";
+import "./SubmitPaperPage.css";
+import Header from "../components/Header";
 
 const SubmitPaperPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const conference = location.state?.conference || null;
+
   const [title, setTitle] = useState("");
   const [abstract, setAbstract] = useState("");
   const [keywords, setKeywords] = useState("");
@@ -16,10 +21,31 @@ const SubmitPaperPage = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (!conference) {
+      alert("Please select a conference first.");
+      navigate("/");
+    }
+  }, [conference, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !abstract || !keywords || !authors || !correspondingAuthor || !correspondingAuthorEmail || !category || !pdfFile) {
+    if (!conference) {
+      setMessage("No conference selected.");
+      return;
+    }
+
+    if (
+      !title ||
+      !abstract ||
+      !keywords ||
+      !authors ||
+      !correspondingAuthor ||
+      !correspondingAuthorEmail ||
+      !category ||
+      !pdfFile
+    ) {
       setMessage("Please fill in all fields.");
       return;
     }
@@ -43,6 +69,8 @@ const SubmitPaperPage = () => {
     formData.append("correspondingAuthorEmail", correspondingAuthorEmail);
     formData.append("category", category);
     formData.append("pdf", pdfFile);
+    formData.append("conferenceId", conference._id);
+    formData.append("conferenceName", conference.name);
 
     try {
       setLoading(true);
@@ -72,8 +100,8 @@ const SubmitPaperPage = () => {
   const renderMessage = () => {
     if (!message) return null;
     const [type, text] = message.includes(":") ? message.split(":") : ["error", message];
-    const className = type === "success" ? "message success" : "message error";
-    return <p className={className}>{text.trim()}</p>;
+    const colorClass = type === "success" ? "message-success" : "message-error";
+    return <p className={`submit-message ${colorClass}`}>{text.trim()}</p>;
   };
 
   return (
@@ -82,6 +110,11 @@ const SubmitPaperPage = () => {
       <div className="submit-container">
         <div className="submit-card">
           <h2 className="submit-title">Submit Your Paper</h2>
+          {conference && (
+            <p className="selected-conference">
+              <strong>Selected Conference:</strong> {conference.name}
+            </p>
+          )}
           {renderMessage()}
           <form onSubmit={handleSubmit} className="submit-form">
             <label>Paper Title</label>

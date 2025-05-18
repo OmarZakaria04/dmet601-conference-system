@@ -26,7 +26,7 @@ function LoginPage() {
       localStorage.setItem("userRole", role);
 
       if (role === "author") {
-        window.location.href = "/submit";
+        window.location.href = "/select-conference";
       } else if (role === "reviewer") {
         window.location.href = "/reviewerdashboard";
       } else if (role === "chair") {

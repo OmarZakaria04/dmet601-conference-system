@@ -16,6 +16,12 @@ const authorSubmissionSchema = new mongoose.Schema({
     default: Date.now,
   },
   assignedReviewers: [String],
-}, { collection: "AuthorSubmission" }); // Keep your explicit collection name
+  // Add conference fields here
+  conferenceId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Conference',
+  },
+  conferenceName: String,
+}, { collection: "AuthorSubmission" });
 
 module.exports = mongoose.model("AuthorSubmission", authorSubmissionSchema, "AuthorSubmission");

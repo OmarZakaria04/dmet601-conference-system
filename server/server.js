@@ -10,6 +10,9 @@ const reviewRoutes = require("./routes/reviews");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require('./routes/admin'); // Add this line at the top
 const chairDecisionRoutes = require("./routes/chairDecision");
+const conferenceRoutes = require('./routes/conferences');
+const Conference = require("./models/Conference"); // ✅ Import the Conference model
+
 const basicAuth = require("basic-auth");
 const authMiddleware = (req, res, next) => {
   const user = basicAuth(req);
@@ -35,16 +38,38 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/api/admin', adminRoutes); // Add this line to your existing middleware setup
 app.use("/api/chair-decision", chairDecisionRoutes);
+app.use("/api/conferences", conferenceRoutes); // Add this line to your existing middleware setup
 app.use(authMiddleware);
 
-
+async function autoCreateConference() {
+  try {
+    const exists = await Conference.findOne({ name: "AI & Robotics 2025" });
+    if (!exists) {
+      await Conference.create({
+        name: "AI & Robotics 2025",
+        location: "Berlin",
+        date: new Date("2025-09-15"),
+        deadline: new Date("2025-07-01"),
+        description: "An international conference on AI and Robotics."
+      });
+      console.log("📌 Default conference created.");
+    } else {
+      console.log("✅ Default conference already exists.");
+    }
+  } catch (error) {
+    console.error("❌ Error checking/creating conference:", error);
+  }
+}
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI || "mongodb+srv://mostafamsamir:Darsh@webprojectcluster.yd1xmra.mongodb.net/conferenceSystem?retryWrites=true&w=majority&appName=webProjectCluster", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("✅ Connected to MongoDB Atlas"))
+.then(() => {
+  console.log("✅ Connected to MongoDB Atlas");
+  autoCreateConference(); // ✅ Call after DB connects
+})
 .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 app.use(express.static(path.join(__dirname, "../client/build")));

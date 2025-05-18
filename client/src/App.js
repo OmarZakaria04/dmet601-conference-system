@@ -10,7 +10,9 @@ import RegisterPage from "./pages/RegisterPage";
 import UserWaitingPage from "./pages/UserWaitingPage";
 import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import NotAuthorizedPage from "./pages/NotAuthorizedPage"; // Import the component
+import NotAuthorizedPage from "./pages/NotAuthorizedPage";
+import ConferenceSelector from './pages/ConferenceSelector'; // ✅ Make sure this is the correct path
+ // Import the component
 
 
 
@@ -26,13 +28,21 @@ function App() {
 
         {/* Author-only */}
         <Route
-          path="/submit"
-          element={
-            <ProtectedRoute requiredRoles={["author"]}>
-              <SubmitPaperPage />
-            </ProtectedRoute>
-          }
-        />
+  path="/submit"
+  element={
+    <ProtectedRoute requiredRoles={["author"]}>
+      <SubmitPaperPage />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/select-conference"
+  element={
+    <ProtectedRoute requiredRoles={["author"]}>
+      <ConferenceSelector />
+    </ProtectedRoute>
+  }
+/>
 
         {/* Reviewer-only */}
         <Route
