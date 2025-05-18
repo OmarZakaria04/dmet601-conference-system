@@ -11,11 +11,21 @@ const CheckFeedbackPage = () => {
 
   // Fetch all papers on mount
   useEffect(() => {
-    fetch("/api/papers")
-      .then((res) => res.json())
-      .then((data) => setPapers(data))
-      .catch((err) => console.error("Error fetching papers:", err));
-  }, []);
+  fetch("/api/papers/reviewed")
+    .then((res) => res.json())
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setPapers(data);
+      } else {
+        console.warn("Expected an array of papers but got:", data);
+        setPapers([]);
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching papers:", err);
+      setPapers([]);
+    });
+}, []);
 
   // When chair clicks "View Reviews"
   const handleViewReviews = (paper) => {
