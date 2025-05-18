@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Header.css";
 
 const Header = () => {
-  const username = localStorage.getItem("username");
+  // const username = localStorage.getItem("username");
   const role = localStorage.getItem("userRole");
   const email = localStorage.getItem("userEmail");
   const navigate = useNavigate();
