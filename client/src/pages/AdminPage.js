@@ -95,32 +95,20 @@ function AdminPage() {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>
-                <select
-                  value={user.role}
-                  onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                  <option value="chair">Chair</option>
-                  <option value="reviewer">Reviewer</option>
-                  <option value="author">Author</option>
-                </select>
-              </td>
-              <td>
-                <select
-                  value={user.role}
-                  onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                  <option value="chair">Chair</option>
-                  <option value="reviewer">Reviewer</option>
-                  <option value="author">Author</option>
-                </select>
-                <button onClick={() => handleDeleteUser(user._id)} style={{ marginLeft: "10px", color: "red" }}>
-                  Delete
-                </button>
-              </td>
+  <select
+    value={user.role}
+    onChange={(e) => handleRoleChange(user._id, e.target.value)}
+  >
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+    <option value="chair">Chair</option>
+    <option value="reviewer">Reviewer</option>
+    <option value="author">Author</option>
+  </select>
+  <button onClick={() => handleDeleteUser(user._id)} style={{ marginLeft: "10px", color: "red" }}>
+    Delete
+  </button>
+</td>
             </tr>
           ))}
         </tbody>
