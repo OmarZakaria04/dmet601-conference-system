@@ -26,6 +26,29 @@ function AdminPage() {
     fetchUsers();
   }, []);
 
+  const handleDeleteUser = async (userId) => {
+  if (!window.confirm("Are you sure you want to delete this user?")) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/admin/delete-user/${userId}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert(data.message);
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    console.error("Error deleting user:", err);
+    alert("Failed to delete user.");
+  }
+};
+
+
+
   const handleRoleChange = async (userId, newRole) => {
     try {
       const res = await fetch(`http://localhost:5000/api/admin/update-role/${userId}`, {
@@ -82,6 +105,21 @@ function AdminPage() {
                   <option value="reviewer">Reviewer</option>
                   <option value="author">Author</option>
                 </select>
+              </td>
+              <td>
+                <select
+                  value={user.role}
+                  onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                  <option value="chair">Chair</option>
+                  <option value="reviewer">Reviewer</option>
+                  <option value="author">Author</option>
+                </select>
+                <button onClick={() => handleDeleteUser(user._id)} style={{ marginLeft: "10px", color: "red" }}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
