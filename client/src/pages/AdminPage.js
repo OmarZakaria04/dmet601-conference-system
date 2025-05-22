@@ -105,7 +105,7 @@ function AdminPage() {
     <option value="reviewer">Reviewer</option>
     <option value="author">Author</option>
   </select>
-  <button onClick={() => handleDeleteUser(user._id)} style={{ marginLeft: "10px", color: "red" }}>
+  <button onClick={() => handleDeleteUser(user._id)} style={{ marginLeft: "10px" }}>
     Delete
   </button>
 </td>
