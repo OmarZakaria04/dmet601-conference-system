@@ -1,38 +1,29 @@
-/* Center the content and apply basic styling */
+body {
+  background: linear-gradient(to bottom, #2c5364);
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
 .status-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f4f4f9;
-  color: #333;
-  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 40px;
+  background-color: #072540;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
 
 .status-container h1 {
-  font-size: 2rem;
-  color: #2c3e50;
+  font-size: 28px;
+  color: #4dc3ff;
   margin-bottom: 20px;
 }
 
 .status-container h2 {
-  font-size: 1.5rem;
-  color: #8e44ad;
-  text-align: center;
-  padding: 10px;
-  background-color: #ecf0f1;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 500px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.status-container h2::before {
-  content: "⏳ ";
-  font-size: 1.5rem;
-}
-
-.status-container h2::after {
-  content: " ⏳";
-  font-size: 1.5rem;
+  font-size: 18px;
+  font-weight: normal;
+  color: #dddddd;
 }
