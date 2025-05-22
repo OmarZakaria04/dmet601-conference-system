@@ -1,9 +1,9 @@
-/* LoginPageStyled.css */
-
 body {
   margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #2c5364);
   font-family: "Segoe UI", sans-serif;
-  background-color: #fef8f5;
+  color: white;
 }
 
 .login-full-container {
@@ -13,77 +13,105 @@ body {
 
 .login-graphic-section {
   flex: 1;
-  background-color: #fef8f5;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 40px;
+  align-items: center;
+  background-color: #041d2c;
 }
 
 .login-graphic {
-  max-width: 60%;
+  max-width: 100%;
   height: auto;
+  padding: 30px;
+  border-radius: 12px;
 }
 
 .login-form-section {
   flex: 1;
-  background-color: #fff;
-  padding: 60px 40px;
+  background-color: #072540;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top-left-radius: 24px;
-  border-bottom-left-radius: 24px;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.05);
-  
+  padding: 60px 40px;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .system-title {
-  font-size: 70px;
+  font-size: 26px;
   text-align: center;
-  font-weight: 600;
   margin-bottom: 30px;
-  color: #1d1d1d;
+  color: #ffffff;
+}
+
+.login-form-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .login-form-box input {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 15px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #0d3c5e;
+  color: white;
+}
+
+.login-form-box input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 5px #00bfff;
+  outline: none;
 }
 
 .login-submit-button {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 500;
-  background-color: #2563eb;
+  padding: 12px;
+  background-color: #ff9800;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s;
+  margin-top: 10px;
 }
 
 .login-submit-button:hover {
-  background-color: #1e50c1;
+  background-color: #e68900;
+}
+
+.forgot-password-link {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.forgot-password-link span {
+  color: #4dc3ff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.forgot-password-link span:hover {
+  color: #00aaff;
 }
 
 .register-line {
+  text-align: center;
   margin-top: 20px;
   font-size: 14px;
-  text-align: center;
 }
 
 .signup-button {
-  margin-left: 5px;
-  color: #2563eb;
   background: none;
   border: none;
-  text-decoration: underline;
+  color: #4dc3ff;
+  margin-left: 6px;
   cursor: pointer;
+  text-decoration: underline;
   font-size: 14px;
+}
+
+.signup-button:hover {
+  color: #00aaff;
 }

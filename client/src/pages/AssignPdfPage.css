@@ -1,79 +1,94 @@
-.assign-pdf-page {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
-  min-height: 100vh;
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom,#2c5364);
+  font-family: "Segoe UI", sans-serif;
+  color: #ffffff;
 }
 
 .assign-container {
   max-width: 600px;
-  margin: 40px auto;
+  margin: 60px auto;
   padding: 30px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  background-color: #072540;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.assign-container h2 {
+h2 {
   text-align: center;
-  margin-bottom: 30px;
-  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.back-btn {
+  background-color: #374151;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #1f2937;
 }
 
 .assign-message {
   text-align: center;
-  font-weight: 600;
+  background-color: #1f3b28;
+  color: #b9fbc0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #4ade80;
   margin-bottom: 20px;
-  color: green;
 }
 
-.assign-form .form-group {
-  margin-bottom: 20px;
+.assign-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
   display: flex;
   flex-direction: column;
 }
 
-.assign-form label {
-  margin-bottom: 8px;
-  color: #34495e;
-  font-weight: 500;
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #ffd700;
 }
 
-.assign-form select {
+.form-group select {
+  background-color: #0d3c5e;
+  color: #ffffff;
+  border: 1px solid #007bff;
+  border-radius: 8px;
   padding: 10px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.form-group select:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 5px #00bfff;
+  outline: none;
 }
 
 .assign-btn {
-  width: 100%;
-  padding: 12px;
-  font-size: 1rem;
-  background-color: #2b6cb0;
+  background-color: #ff9800;
   color: white;
   border: none;
-  border-radius: 6px;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.back-btn {
-  background-color: transparent;
-  border: none;
-  color: #2b6cb0;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.back-btn:hover {
-  color: #1a4f8a;
-  text-decoration: underline;
-}
-
-
 .assign-btn:hover {
-  background-color: #1e4e8c;
+  background-color: #e68900;
 }

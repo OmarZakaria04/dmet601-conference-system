@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   role: { type: String },
+  resetToken: String, 
+  resetTokenExpiry: Date, 
 }, { collection: "Auth" });
 
 // Hash password before saving

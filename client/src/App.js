@@ -12,6 +12,9 @@ import AdminPage from "./pages/AdminPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotAuthorizedPage from "./pages/NotAuthorizedPage";
 import ConferenceSelector from './pages/ConferenceSelector'; // ✅ Make sure this is the correct path
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
  // Import the component
 
 
@@ -25,6 +28,8 @@ function App() {
         <Route path="/not-authorized" element={<NotAuthorizedPage />} /> {/* Add this route */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} /> 
 
         {/* Author-only */}
         <Route

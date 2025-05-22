@@ -1,41 +1,44 @@
+body {
+  background: linear-gradient(to bottom,#2c5364);
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
 .not-authorized-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #f9f9f9;
-  color: #333;
-  font-family: Arial, sans-serif;
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 40px;
+  background-color: #072540;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   text-align: center;
-  padding: 20px;
 }
 
 .not-authorized-container h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #c0392b;
+  font-size: 28px;
+  color: #ff6b6b;
+  margin-bottom: 20px;
 }
 
 .not-authorized-container p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #e0e0e0;
 }
 
 .back-home-link {
-  text-decoration: none;
-  color: #fff;
-  background-color: #3498db;
+  display: inline-block;
   padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  background-color: #4dc3ff;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .back-home-link:hover {
-  background-color: #2980b9;
-}
-.not-authorized-container img {
-  max-width: 100%;
-  height: auto;
-  margin-top: 20px;
+  background-color: #00aaff;
 }

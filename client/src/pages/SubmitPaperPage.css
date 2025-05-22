@@ -1,84 +1,109 @@
+body {
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
 .submit-container {
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  padding: 60px 20px;
 }
 
 .submit-card {
   width: 100%;
-  max-width: 600px;
-  background-color: #f9f9f9;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  background-color: #072540;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .submit-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 1rem;
   text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #ffd700;
+}
+
+.selected-conference {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: #cccccc;
+}
+
+.submit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .submit-form label {
-  display: block;
-  margin-top: 1rem;
-  font-weight: 600;
+  font-weight: bold;
+  color: #dddddd;
 }
 
-.submit-form input,
+.submit-form input[type="text"],
+.submit-form input[type="email"],
+.submit-form input[type="file"],
 .submit-form select,
 .submit-form textarea {
-  width: 100%;
-  padding: 0.6rem;
-  margin-top: 0.4rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
+  background-color: #0d3c5e;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #007bff;
+  font-size: 14px;
 }
 
-.submit-form textarea {
-  resize: vertical;
+.submit-form input:focus,
+.submit-form textarea:focus,
+.submit-form select:focus {
+  border-color: #00bfff;
+  outline: none;
+  box-shadow: 0 0 6px #00bfff;
 }
 
 .submit-button {
-  margin-top: 1.5rem;
-  width: 100%;
-  background-color: #007bff;
+  padding: 14px;
+  background-color: #4caf50;
   color: white;
-  padding: 0.75rem;
+  font-weight: bold;
+  font-size: 16px;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 10px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #388e3c;
+}
+
+.file-preview {
+  font-size: 13px;
+  color: #b0d7ff;
 }
 
 .submit-message {
   text-align: center;
-  margin-bottom: 1rem;
-  font-weight: bold;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
 .message-success {
-  color: green;
+  background-color: #1f3b28;
+  color: #b9fbc0;
+  border: 1px solid #4ade80;
 }
 
 .message-error {
-  color: red;
-}
-
-.file-preview {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.selected-conference {
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-  color: #333;
+  background-color: #3b1f1f;
+  color: #ffcdd2;
+  border: 1px solid #ef5350;
 }

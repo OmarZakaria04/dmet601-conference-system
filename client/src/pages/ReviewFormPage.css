@@ -1,97 +1,97 @@
+body {
+  background: linear-gradient(to bottom, #2c5364);
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
 .container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 24px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: #072540;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .title {
-  font-size: 24px;
-  font-weight: 700;
   text-align: center;
-  margin-bottom: 24px;
-}
-
-.openPdfButton {
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 16px;
-  transition: background-color 0.3s;
-}
-
-.openPdfButton:hover {
-  background-color: #0056b3;
-}
-
-.message {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-
-.success {
-  color: #28a745;
-}
-
-.error {
-  color: #dc3545;
-}
-
-.loading {
-  color: #ffc107;
-}
-
-/* Form Styles */
-.formGroup {
   margin-bottom: 20px;
 }
 
-label {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 8px;
+.openPdfButton {
   display: block;
+  margin: 0 auto 20px auto;
+  padding: 10px 20px;
+  background-color: #00bcd4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.inputField, .textareaField {
-  width: 100%;
+.openPdfButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.inputField,
+.textareaField {
   padding: 12px;
-  border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box; /* Ensures padding doesn't overflow */
+  background-color: #0d3c5e;
+  color: white;
+  border: 1px solid #007bff;
+  font-size: 14px;
+}
+
+.inputField:focus,
+.textareaField:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 5px #00bfff;
+  outline: none;
 }
 
 .textareaField {
-  resize: vertical; /* Allow the textarea to be resized vertically */
-  min-height: 120px; /* Set a minimum height for the feedback textarea */
+  min-height: 120px;
+  resize: vertical;
 }
 
 .submitButton {
   padding: 12px;
-  background-color: #28a745;
+  background-color: #4caf50;
   color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
   border: none;
-  width: 100%; /* Full width for the submit button */
-  margin-top: 16px;
-  transition: background-color 0.3s;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .submitButton:hover {
-  background-color: #218838;
+  background-color: #388e3c;
 }
 
-.submitButton:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+.message.success {
+  background-color: #1f3b28;
+  color: #b9fbc0;
+  border: 1px solid #4ade80;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 15px;
 }

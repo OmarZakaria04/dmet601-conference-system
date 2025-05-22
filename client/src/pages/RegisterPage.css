@@ -1,107 +1,118 @@
-/* RegisterPage.css */
-
 body {
-  margin: 0;
+  background: linear-gradient(to bottom, #2c5364);
   font-family: "Segoe UI", sans-serif;
-  background-color: #fef8f5;
+  color: white;
+  margin: 0;
+  padding: 0;
 }
 
 .register-full-container {
   display: flex;
   min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  background-color: #fef8f5;
 }
 
 .register-image-section {
   flex: 1;
-  background-color: #fef8f5;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 40px;
+  align-items: center;
+  background-color: #041d2c;
 }
 
 .register-graphic {
-  max-width: 60%;
+  max-width: 100%;
   height: auto;
+  padding: 30px;
+  border-radius: 12px;
 }
 
 .register-form-section {
   flex: 1;
-  background-color: #fff;
-  padding: 60px 40px 20px 40px;
+  background-color: #072540;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top-right-radius: 24px;
-  border-bottom-right-radius: 24px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  padding: 60px 40px;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .register-title {
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 24px;
-  color: #222;
+  font-size: 26px;
   text-align: center;
+  margin-bottom: 30px;
+  color: #ffffff;
 }
 
-.register-form-box input {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-sizing: border-box;
+.register-form-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.register-form-box input[type="text"],
+.register-form-box input[type="email"],
+.register-form-box input[type="password"] {
+  padding: 12px;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #0d3c5e;
+  color: white;
+}
+
+.register-form-box input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 5px #00bfff;
+  outline: none;
 }
 
 .role-section {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  font-size: 15px;
-  color: #444;
+  gap: 30px;
+  margin-top: 10px;
+  color: #ddd;
 }
 
 .role-section label {
   display: flex;
-  margin-left: 10px;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
+  font-size: 14px;
 }
 
 .register-button {
-  width: 100%;
-  padding: 14px;
-  background-color: #4f46e5;
+  padding: 12px;
+  background-color: #ff9800;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  font-weight: bold;
   font-size: 16px;
-  margin-top: 10px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  margin-top: 10px;
 }
 
 .register-button:hover {
-  background-color: #4338ca;
+  background-color: #e68900;
 }
 
 .login-redirect {
+  text-align: center;
   margin-top: 20px;
   font-size: 14px;
-  text-align: center;
 }
 
 .signin-link {
   background: none;
   border: none;
-  color: #2563eb;
-  text-decoration: underline;
-  cursor: pointer;
+  color: #4dc3ff;
   margin-left: 6px;
+  cursor: pointer;
+  text-decoration: underline;
   font-size: 14px;
+}
+
+.signin-link:hover {
+  color: #00aaff;
 }

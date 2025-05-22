@@ -67,6 +67,11 @@ function LoginPage() {
           />
           <button type="submit" className="login-submit-button">Sign in</button>
         </form>
+        <p className="forgot-password-link">
+          <span onClick={() => navigate("/forgot-password")}>
+            Forgot Password?
+          </span>
+        </p>
         <div className="register-line">
           Don't have an account?
           <button
