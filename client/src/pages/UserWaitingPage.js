@@ -1,6 +1,7 @@
 import React from "react";
 import "./status.css"; // optional for styling
 import Header from "../components/Header"; // Import Header component
+import UserWaitingPage from 
 
 function UserWaitingPage() {
   return (
